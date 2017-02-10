@@ -37,6 +37,10 @@ public class EnemyPathing : MonoBehaviour {
                 currentNode++;
                 CheckNode();
             }
+            if(PathNodes[currentNode] == PathNodes[PathNodes.Length-1])
+            {
+                currentNode = -1;
+            }
         }
 	}
 }
