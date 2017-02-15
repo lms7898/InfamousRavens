@@ -11,27 +11,52 @@ public class EnemyBase : MonoBehaviour {
     float Timer;
     private Node Point;
     int pointIndex = 0;
+    public GameObject Path;
+    int direction = 1;
     
 
 	// Use this for initialization
 	void Start () {
-        PathPoints = GetComponentsInChildren<Node>();
+        //load the path
+        PathPoints = Path.GetComponentsInChildren<Node>();
         Point = PathPoints[pointIndex];
         currentTarget = Point.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        //Moving our enemy based on the public MoveSpeed variable
         transform.position += (currentTarget - transform.position).normalized * MoveSpeed * Time.deltaTime;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<>
+        //Pathing
+        if (other.GetComponentInChildren<Node>())
         {
-            ++pointIndex;
+            if (other.GetComponent<Collider2D>().IsTouching(this.GetComponent<Collider2D>()))
+            {
+                //Direction to move on the path
+                if (pointIndex >= PathPoints.Length - 1)
+                {
+                    direction = -1;
+                }
+                if (pointIndex <= 0)
+                {
+                    direction = 1;
+                }
+            }
+
+            //Updating the enemy goal point
+            if (direction == 1)
+            {
+                ++pointIndex;
+            }
+            else { --pointIndex; }
+            Point = PathPoints[pointIndex];
+            currentTarget = Point.transform.position;
         }
-        Point = PathPoints[pointIndex];
-        currentTarget = Point.transform.position;
+
+
     }
 }

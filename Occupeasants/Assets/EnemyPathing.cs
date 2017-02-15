@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemyPathing : MonoBehaviour {
 
     Node [] PathNodes;
-    public GameObject Enemy;
     public float MoveSpeed;
     float Timer;
     static Vector3 CurrentPosition;
@@ -26,9 +25,9 @@ public class EnemyPathing : MonoBehaviour {
 	void Update () {
         Timer += Time.deltaTime * MoveSpeed;
 
-        if(Enemy.transform.position != CurrentPosition)
+        if(this.transform.position != CurrentPosition)
         {
-            Enemy.transform.position = Vector3.Lerp(Enemy.transform.position, CurrentPosition, Timer);
+            this.transform.position = Vector3.Lerp(this.transform.position, CurrentPosition, Timer);
         }
         else
         {
