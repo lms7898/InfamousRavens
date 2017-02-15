@@ -5,16 +5,33 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour {
 
 
-    private Vector3 Player;
-    public Vector2 Point;
+    private Vector3 currentTarget;
+    Node [] PathPoints;
+    public float MoveSpeed;
+    float Timer;
+    private Node Point;
+    int pointIndex = 0;
+    
 
 	// Use this for initialization
 	void Start () {
-		
+        PathPoints = GetComponentsInChildren<Node>();
+        Point = PathPoints[pointIndex];
+        currentTarget = Point.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        //GetComponent<Rigidbody2D>().velocity = new Vector2(5, GetComponent<Rigidbody2D>().velocity.y);
-	}
+        transform.position += (currentTarget - transform.position).normalized * MoveSpeed * Time.deltaTime;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.GetComponent<>
+        {
+            ++pointIndex;
+        }
+        Point = PathPoints[pointIndex];
+        currentTarget = Point.transform.position;
+    }
 }
