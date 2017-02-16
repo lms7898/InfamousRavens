@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour {
     private float moveY;
 
     private Rigidbody2D playerBody;
+    private SpriteRenderer sprite;
 
     private Animator anim;
 
@@ -18,10 +19,14 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
         playerBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        sprite = GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        // reset sprite color *For Now*
+        sprite.color = Color.white;
+
         float posX = transform.position.x;
         float posY = transform.position.y;
 
@@ -36,6 +41,9 @@ public class PlayerMovement : MonoBehaviour {
         playerBody.MovePosition(playerPos + movement);
 
         Animate();
+
+        if (Input.GetKey("space"))
+            Attack();
 	}
 
     void Animate() {
@@ -51,11 +59,42 @@ public class PlayerMovement : MonoBehaviour {
 
         if (walking)
         {
-            anim.SetFloat("mouseX", mousePos.x);
-            anim.SetFloat("mouseY", mousePos.y);
+            anim.SetBool("walking", walking);
+            if (Input.GetKey("w")) {
+                anim.SetBool("wPressed", true);
+                anim.SetBool("aPressed", false);
+                anim.SetBool("sPressed", false);
+                anim.SetBool("dPressed", false);
+            }
+            else if (Input.GetKey("a")) {
+                anim.SetBool("aPressed", true);
+                anim.SetBool("wPressed", false);
+                anim.SetBool("sPressed", false);
+                anim.SetBool("dPressed", false);
+            }
+            else if (Input.GetKey("s")) {
+                anim.SetBool("sPressed", true);
+                anim.SetBool("wPressed", false);
+                anim.SetBool("aPressed", false);
+                anim.SetBool("dPressed", false);
+            }
+            else if (Input.GetKey("d")) {
+                anim.SetBool("dPressed", true);
+                anim.SetBool("wPressed", false);
+                anim.SetBool("aPressed", false);
+                anim.SetBool("sPressed", false);
+            }
         }else {
-            anim.SetFloat("mouseX", 0f);
-            anim.SetFloat("mouseY", 0f);
+            anim.SetBool("walking", walking);
+            anim.SetBool("wPressed", false);
+            anim.SetBool("aPressed", false);
+            anim.SetBool("sPressed", false);
+            anim.SetBool("dPressed", false);
         }
+    }
+
+    void Attack() {
+        // Placeholder until we have attack animation
+        sprite.color = Color.green;
     }
 }
