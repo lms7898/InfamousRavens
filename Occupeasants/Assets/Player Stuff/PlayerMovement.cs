@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
-    public float speed = 2.5f;
+    public float speed = 4f;
 
     private float moveX;
     private float moveY;
@@ -34,5 +34,28 @@ public class PlayerMovement : MonoBehaviour {
         movement = movement * speed * Time.deltaTime;
 
         playerBody.MovePosition(playerPos + movement);
+
+        Animate();
 	}
+
+    void Animate() {
+        bool walking;
+
+        if (Input.GetKey("w") || Input.GetKey("a") || Input.GetKey("s") || Input.GetKey("d"))
+            walking = true;
+        else
+            walking = false;
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+
+        if (walking)
+        {
+            anim.SetFloat("mouseX", mousePos.x);
+            anim.SetFloat("mouseY", mousePos.y);
+        }else {
+            anim.SetFloat("mouseX", 0f);
+            anim.SetFloat("mouseY", 0f);
+        }
+    }
 }
