@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour {
     private float moveX;
     private float moveY;
 
+    private bool attacking;
+
     private Rigidbody2D playerBody;
     private SpriteRenderer sprite;
 
@@ -17,6 +19,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        attacking = false;
         playerBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
@@ -25,7 +28,9 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
         // reset sprite color *For Now*
+        // and reset attacking variable
         sprite.color = Color.white;
+        attacking = false;
 
         float posX = transform.position.x;
         float posY = transform.position.y;
@@ -44,6 +49,8 @@ public class PlayerMovement : MonoBehaviour {
 
         if (Input.GetKey("space"))
             Attack();
+
+
 	}
 
     void Animate() {
@@ -96,5 +103,17 @@ public class PlayerMovement : MonoBehaviour {
     void Attack() {
         // Placeholder until we have attack animation
         sprite.color = Color.green;
+
+        // set attacking to true
+        attacking = true;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy" && attacking == true)
+        {
+            print("colliding");
+            Destroy(collision.gameObject);
+        }
     }
 }
