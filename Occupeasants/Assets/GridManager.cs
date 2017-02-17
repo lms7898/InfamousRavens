@@ -6,16 +6,29 @@ using System.Text.RegularExpressions;
 public class GridManager : MonoBehaviour {
 
     public GameObject floor_tile;
+    public string fileName;
 
 	// Use this for initialization
 	void Start () {
 
-        //string[][] textFile = ReadLevel();
+        string[][] textFile = ReadLevel("D:/Profiles/may4028/Documents/InfamousRavens/Occupeasants/Assets/exampleLevel.txt");
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < textFile.Length; i++)
         {
-            Instantiate(floor_tile);
-            floor_tile.transform.position = new Vector3(0 + i*2, 0, -4);
+            for (int j = 0; j < textFile[i].Length; j++)
+            {
+                Instantiate(floor_tile);
+                floor_tile.transform.position = new Vector3(i * 2, j * 2, -4);
+                if (textFile[i][j] == "1")
+                {
+                    floor_tile.GetComponent<SpriteRenderer>().color = Color.green;
+                } 
+                else if (textFile[i][j] == "0")
+                {
+                    floor_tile.GetComponent<SpriteRenderer>().color = Color.black;
+                }
+
+            }
         }
         
 	}
