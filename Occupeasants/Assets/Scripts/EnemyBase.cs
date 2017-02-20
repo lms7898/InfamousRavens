@@ -2,34 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour {
+public class EnemyBase : MonoBehaviour
+{
 
 
     private Vector3 currentTarget;
-    Node [] PathPoints;
+    Node[] PathPoints;
     public float MoveSpeed;
+    public float defaultMoveSpeed;
     float Timer;
     private Node Point;
     int pointIndex = 0;
     public GameObject Path;
     int direction = 1;
     public GameObject Player;
+    float currentTime;
+    public bool slowed = false;
 
 
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
-    
 
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start()
+    {
         //load the path and set the targets
         PathPoints = Path.GetComponentsInChildren<Node>();
         Point = PathPoints[pointIndex];
         currentTarget = Point.transform.position;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        defaultMoveSpeed = MoveSpeed;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Timer = Time.fixedTime;
+
         //Moving our enemy based on the public MoveSpeed variable
         transform.position += (currentTarget - transform.position).normalized * MoveSpeed * Time.deltaTime;
 
@@ -65,8 +74,8 @@ public class EnemyBase : MonoBehaviour {
             Point = PathPoints[pointIndex];
             currentTarget = Point.transform.position;
         }
-        
-        if(other.GetComponent<Shiny>())
+
+        if (other.GetComponent<Shiny>())
         {
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
@@ -83,7 +92,7 @@ public class EnemyBase : MonoBehaviour {
         distToPlayer = Vector3.Distance(transform.position, Player.transform.position);
 
         //Did the player come close enough?
-        if(distToPlayer < 5)
+        if (distToPlayer < 5)
         {
             if (!hitPlayer)
             {
@@ -93,11 +102,12 @@ public class EnemyBase : MonoBehaviour {
         }
 
         //Player too far now, fack
-        if(distToPlayer > 8)
+        if (distToPlayer > 8)
         {
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
         }
 
     }
+
 }
