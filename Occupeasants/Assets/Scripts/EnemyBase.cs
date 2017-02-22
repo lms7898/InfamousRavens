@@ -5,21 +5,23 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour
 {
 
-
-    private Vector3 currentTarget;
-    Node[] PathPoints;
     public float MoveSpeed;
-    public float defaultMoveSpeed;
-    float Timer;
-    private Node Point;
-    int pointIndex = 0;
     public GameObject Path;
-    int direction = 1;
     public GameObject Player;
     public float currentTime;
     public bool slowed = false;
+    public GameObject HealthBar;
 
+    private Vector3 currentTarget;
+    Node[] PathPoints;
+    private Node Point;
 
+    float Timer;
+    int pointIndex = 0;
+    int direction = 1;
+    private float DefaultMS;
+    private float Health = 100;
+    
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
 
@@ -31,7 +33,7 @@ public class EnemyBase : MonoBehaviour
         PathPoints = Path.GetComponentsInChildren<Node>();
         Point = PathPoints[pointIndex];
         currentTarget = Point.transform.position;
-        defaultMoveSpeed = MoveSpeed;
+        DefaultMS = MoveSpeed;
     }
 
     // Update is called once per frame
@@ -44,13 +46,13 @@ public class EnemyBase : MonoBehaviour
 
         //Checking the surroundings for alternative targets
         CheckSurroundings();
-
+        Kill();
         if (slowed)
         {
             MoveSpeed = 4;
             if (Timer >= currentTime + 3)
             {
-                MoveSpeed = defaultMoveSpeed;
+                MoveSpeed = DefaultMS;
                 slowed = false;
                 GetComponent<SpriteRenderer>().color = Color.white;
                 Debug.Log("not trapped");
@@ -92,6 +94,7 @@ public class EnemyBase : MonoBehaviour
         {
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
+            TakeDamage(10);
         }
     }
 
@@ -123,6 +126,28 @@ public class EnemyBase : MonoBehaviour
             hitPlayer = true;
         }
 
+    }
+
+    private void TakeDamage(float DmgVal)
+    {
+        //Divide for the localScale to work properly
+        Health = (Health - DmgVal) / 100;
+        HealthBar.transform.localScale = new Vector3(
+            Mathf.Clamp(Health, 0f, 1f),
+            HealthBar.transform.localScale.y,
+            HealthBar.transform.localScale.z);
+
+        //Re-multiply to retain an accurate measure of health
+        Health *= 100;
+        Debug.Log("New Health:" + Health);
+    }
+
+    private void Kill()
+    {
+        if(Health <= 0)
+        {
+            Destroy(this);
+        }
     }
 
 }
