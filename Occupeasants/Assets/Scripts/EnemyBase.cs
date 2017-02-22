@@ -16,7 +16,7 @@ public class EnemyBase : MonoBehaviour
     public GameObject Path;
     int direction = 1;
     public GameObject Player;
-    float currentTime;
+    public float currentTime;
     public bool slowed = false;
 
 
@@ -44,6 +44,19 @@ public class EnemyBase : MonoBehaviour
 
         //Checking the surroundings for alternative targets
         CheckSurroundings();
+
+        if (slowed)
+        {
+            MoveSpeed = 4;
+            if (Timer >= currentTime + 3)
+            {
+                MoveSpeed = defaultMoveSpeed;
+                slowed = false;
+                GetComponent<SpriteRenderer>().color = Color.white;
+                Debug.Log("not trapped");
+                Debug.Log(Timer.ToString());
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -75,7 +88,7 @@ public class EnemyBase : MonoBehaviour
             currentTarget = Point.transform.position;
         }
 
-        if (other.GetComponent<Shiny>())
+        if (other.gameObject.CompareTag("Player"))
         {
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
@@ -90,19 +103,21 @@ public class EnemyBase : MonoBehaviour
         //Check distance from the player
         float distToPlayer;
         distToPlayer = Vector3.Distance(transform.position, Player.transform.position);
+        Debug.DrawLine(Player.transform.position, transform.position, Color.green);
 
         //Did the player come close enough?
-        if (distToPlayer < 5)
+        if (distToPlayer <= 10)
         {
             if (!hitPlayer)
             {
                 //Go get em!
                 currentTarget = Player.transform.position;
+                Debug.DrawLine(Player.transform.position, transform.position, Color.red);
             }
         }
 
-        //Player too far now, fack
-        if (distToPlayer > 8)
+        //Player too far now
+        if (distToPlayer > 10)
         {
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;

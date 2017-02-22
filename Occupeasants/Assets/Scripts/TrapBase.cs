@@ -5,7 +5,6 @@ using UnityEngine;
 public class TrapBase : MonoBehaviour {
 
     float Timer;
-    float startTime;
 
 	// Use this for initialization
 	void Start () {
@@ -19,23 +18,25 @@ public class TrapBase : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.CompareTag("Enemy"))
-        {
-            startTime = Timer;
-            other.gameObject.GetComponent<EnemyBase>().slowed = true;
-            Debug.Log("trapped");
+        Slow(other);
+    }
 
-            if (other.gameObject.GetComponent<EnemyBase>().slowed)
-            {
-                other.gameObject.GetComponent<EnemyBase>().MoveSpeed = 4;
-                if (Timer >= startTime + 3)
-                {
-                    other.gameObject.GetComponent<EnemyBase>().MoveSpeed = other.gameObject.GetComponent<EnemyBase>().defaultMoveSpeed;
-                    other.gameObject.GetComponent<EnemyBase>().slowed = false;
-                    Debug.Log("not trapped");
-                    Debug.Log(Timer.ToString());
-                }
-            }
+    private void Remove()
+    {
+        Destroy(this);
+    }
+
+    //Make the effect a method and then call the method in OnTriggerEnter2D, 
+    //do this for multiple effect traps to keep clutter low
+    private void Slow(Collider2D other)
+    {
+        other.gameObject.GetComponent<EnemyBase>().currentTime = Timer;
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            other.gameObject.GetComponent<EnemyBase>().slowed = true;
+            other.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+            Debug.Log("trapped");
+            Debug.Log(Timer.ToString());
         }
     }
 }
