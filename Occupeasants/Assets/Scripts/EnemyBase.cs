@@ -11,6 +11,9 @@ public class EnemyBase : MonoBehaviour
     public float currentTime;
     public bool slowed = false;
     public GameObject HealthBar;
+    public GameObject Status;
+
+    public Sprite Attacking, Hunting;
 
     private Vector3 currentTarget;
     Node[] PathPoints;
@@ -21,6 +24,7 @@ public class EnemyBase : MonoBehaviour
     int direction = 1;
     private float DefaultMS;
     private float Health = 100;
+    private bool hasTreasure;
     
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
@@ -34,19 +38,25 @@ public class EnemyBase : MonoBehaviour
         Point = PathPoints[pointIndex];
         currentTarget = Point.transform.position;
         DefaultMS = MoveSpeed;
+        hasTreasure = false;
     }
 
+    void FixedUpdate()
+    {
+        //Moving our enemy based on the public MoveSpeed variable
+        transform.position += (currentTarget - transform.position).normalized * MoveSpeed * Time.deltaTime;
+    }
+    
     // Update is called once per frame
     void Update()
     {
         Timer = Time.fixedTime;
 
-        //Moving our enemy based on the public MoveSpeed variable
-        transform.position += (currentTarget - transform.position).normalized * MoveSpeed * Time.deltaTime;
-
         //Checking the surroundings for alternative targets
         CheckSurroundings();
         Kill();
+
+        //For traps
         if (slowed)
         {
             MoveSpeed = 4;
@@ -80,6 +90,13 @@ public class EnemyBase : MonoBehaviour
                 hitPlayer = false;
             }
 
+            if(other.GetComponentInChildren<Chest>())
+            {
+                hasTreasure = true;
+                Status.GetComponent<SpriteRenderer>().color = Color.red;
+                Debug.Log("Got the treasure");
+            }
+
             //Updating the enemy goal point
             if (direction == 1)
             {
@@ -109,19 +126,30 @@ public class EnemyBase : MonoBehaviour
         Debug.DrawLine(Player.transform.position, transform.position, Color.green);
 
         //Did the player come close enough?
-        if (distToPlayer <= 10)
+        if (distToPlayer <= 3)
         {
             if (!hitPlayer)
             {
                 //Go get em!
                 currentTarget = Player.transform.position;
+                Status.GetComponent<SpriteRenderer>().sprite = Attacking;
+                Status.GetComponent<SpriteRenderer>().color = Color.red;
                 Debug.DrawLine(Player.transform.position, transform.position, Color.red);
             }
         }
 
         //Player too far now
-        if (distToPlayer > 10)
+        if (distToPlayer > 3)
         {
+            Status.GetComponent<SpriteRenderer>().sprite = Hunting;
+            if (hasTreasure)
+            {
+                Status.GetComponent<SpriteRenderer>().color = Color.red;
+            }
+            else
+            {
+                Status.GetComponent<SpriteRenderer>().color = Color.yellow;
+            }
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
         }
@@ -146,7 +174,7 @@ public class EnemyBase : MonoBehaviour
     {
         if(Health <= 0)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 
