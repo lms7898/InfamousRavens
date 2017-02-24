@@ -126,7 +126,7 @@ public class EnemyBase : MonoBehaviour
         Debug.DrawLine(Player.transform.position, transform.position, Color.green);
 
         //Did the player come close enough?
-        if (distToPlayer <= 3)
+        if (distToPlayer <= 7)
         {
             if (!hitPlayer)
             {
@@ -139,7 +139,7 @@ public class EnemyBase : MonoBehaviour
         }
 
         //Player too far now
-        if (distToPlayer > 3)
+        if (distToPlayer > 7)
         {
             Status.GetComponent<SpriteRenderer>().sprite = Hunting;
             if (hasTreasure)
