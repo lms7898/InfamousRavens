@@ -8,8 +8,7 @@ public class EnemyBase : MonoBehaviour
     public float MoveSpeed;
     public GameObject Path;
     public GameObject Player;
-    public float currentTime;
-    public bool slowed = false;
+    
     public GameObject HealthBar;
     public GameObject Status;
 
@@ -19,12 +18,14 @@ public class EnemyBase : MonoBehaviour
     Node[] PathPoints;
     private Node Point;
 
-    float Timer;
+    private float Timer;
     int pointIndex = 0;
     int direction = 1;
     private float DefaultMS;
     private float Health = 100;
     private bool hasTreasure;
+    private float currentTime;
+    private bool slowed = false;
     
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
@@ -50,8 +51,6 @@ public class EnemyBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Timer = Time.fixedTime;
-
         //Checking the surroundings for alternative targets
         CheckSurroundings();
         Kill();
@@ -60,13 +59,13 @@ public class EnemyBase : MonoBehaviour
         if (slowed)
         {
             MoveSpeed = 4;
-            if (Timer >= currentTime + 3)
+            if (Time.fixedTime >= Timer)
             {
                 MoveSpeed = DefaultMS;
                 slowed = false;
                 GetComponent<SpriteRenderer>().color = Color.white;
                 Debug.Log("not trapped");
-                Debug.Log(Timer.ToString());
+                Debug.Log(Time.fixedTime);
             }
         }
     }
@@ -112,6 +111,15 @@ public class EnemyBase : MonoBehaviour
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
             TakeDamage(10);
+        }
+
+        if(other.GetComponent<TrapBase>())
+        {
+            Timer = Time.fixedTime + 3;
+            slowed = true;
+            GetComponent<SpriteRenderer>().color = Color.blue;
+            Debug.Log("trapped");
+            Debug.Log(Time.fixedTime);
         }
     }
 
