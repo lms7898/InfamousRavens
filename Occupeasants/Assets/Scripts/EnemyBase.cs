@@ -18,7 +18,8 @@ public class EnemyBase : MonoBehaviour
     Node[] PathPoints;
     private Node Point;
 
-    private float Timer;
+    private float STimer;
+    private float BTimer;
     int pointIndex = 0;
     int direction = 1;
     private float DefaultMS;
@@ -26,6 +27,7 @@ public class EnemyBase : MonoBehaviour
     private bool hasTreasure;
     private float currentTime;
     private bool slowed = false;
+    private bool bleeding = false;
     
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
@@ -46,6 +48,11 @@ public class EnemyBase : MonoBehaviour
     {
         //Moving our enemy based on the public MoveSpeed variable
         transform.position += (currentTarget - transform.position).normalized * MoveSpeed * Time.deltaTime;
+
+        if(bleeding)
+        {
+
+        }
     }
     
     // Update is called once per frame
@@ -59,13 +66,26 @@ public class EnemyBase : MonoBehaviour
         if (slowed)
         {
             MoveSpeed = 4;
-            if (Time.fixedTime >= Timer)
+            if (Time.fixedTime >= STimer)
             {
                 MoveSpeed = DefaultMS;
                 slowed = false;
                 GetComponent<SpriteRenderer>().color = Color.white;
                 Debug.Log("not trapped");
                 Debug.Log(Time.fixedTime);
+            }
+        }
+
+        if(bleeding)
+        {
+            if(Time.fixedTime == BTimer - 2)
+            {
+                TakeDamage(10);
+            }
+            if(Time.fixedTime >= BTimer)
+            {
+                bleeding = false;
+                GetComponentInChildren<ParticleSystem>().Stop();
             }
         }
     }
@@ -113,13 +133,20 @@ public class EnemyBase : MonoBehaviour
             TakeDamage(10);
         }
 
-        if(other.GetComponent<TrapBase>())
+        if(other.GetComponent<BearTrap>())
         {
-            Timer = Time.fixedTime + 3;
+            STimer = Time.fixedTime + other.GetComponent<TrapBase>().Duration;
             slowed = true;
             GetComponent<SpriteRenderer>().color = Color.blue;
             Debug.Log("trapped");
             Debug.Log(Time.fixedTime);
+        }
+
+        if(other.GetComponent<SpikeTrap>())
+        {
+            BTimer = Time.fixedTime + other.GetComponent<SpikeTrap>().Duration;
+            bleeding = true;
+            GetComponentInChildren<ParticleSystem>().Play();
         }
     }
 
