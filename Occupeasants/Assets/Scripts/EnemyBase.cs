@@ -19,7 +19,6 @@ public class EnemyBase : MonoBehaviour
     private Node Point;
 
     private float STimer;
-    private float BTimer;
     int pointIndex = 0;
     int direction = 1;
     private float DefaultMS;
@@ -27,7 +26,7 @@ public class EnemyBase : MonoBehaviour
     private bool hasTreasure;
     private float currentTime;
     private bool slowed = false;
-    private bool bleeding = false;
+    private float slowedSpeed;
     
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
@@ -37,6 +36,8 @@ public class EnemyBase : MonoBehaviour
     void Start()
     {
         //load the path and set the targets
+        Path = GameObject.Find("Path");
+        Player = GameObject.Find("Player");
         PathPoints = Path.GetComponentsInChildren<Node>();
         Point = PathPoints[pointIndex];
         currentTarget = Point.transform.position;
@@ -48,11 +49,6 @@ public class EnemyBase : MonoBehaviour
     {
         //Moving our enemy based on the public MoveSpeed variable
         transform.position += (currentTarget - transform.position).normalized * MoveSpeed * Time.deltaTime;
-
-        if(bleeding)
-        {
-
-        }
     }
     
     // Update is called once per frame
@@ -62,10 +58,10 @@ public class EnemyBase : MonoBehaviour
         CheckSurroundings();
         Kill();
 
-        //For traps
+        //For slow effect
         if (slowed)
         {
-            MoveSpeed = 4;
+            MoveSpeed = slowedSpeed;
             if (Time.fixedTime >= STimer)
             {
                 MoveSpeed = DefaultMS;
@@ -73,19 +69,6 @@ public class EnemyBase : MonoBehaviour
                 GetComponent<SpriteRenderer>().color = Color.white;
                 Debug.Log("not trapped");
                 Debug.Log(Time.fixedTime);
-            }
-        }
-
-        if(bleeding)
-        {
-            if(Time.fixedTime == BTimer - 2)
-            {
-                TakeDamage(10);
-            }
-            if(Time.fixedTime >= BTimer)
-            {
-                bleeding = false;
-                GetComponentInChildren<ParticleSystem>().Stop();
             }
         }
     }
@@ -126,27 +109,30 @@ public class EnemyBase : MonoBehaviour
             currentTarget = Point.transform.position;
         }
 
+        //Hit the player
         if (other.gameObject.CompareTag("Player"))
         {
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
-            TakeDamage(10);
         }
 
+
+        //Trap Type Checks
+        //Bear -- Init Damage + Slow
         if(other.GetComponent<BearTrap>())
         {
             STimer = Time.fixedTime + other.GetComponent<TrapBase>().Duration;
             slowed = true;
+            slowedSpeed = MoveSpeed / 2;
             GetComponent<SpriteRenderer>().color = Color.blue;
             Debug.Log("trapped");
             Debug.Log(Time.fixedTime);
         }
 
+        //Spikes -- Bleed Damage over Time
         if(other.GetComponent<SpikeTrap>())
         {
-            BTimer = Time.fixedTime + other.GetComponent<SpikeTrap>().Duration;
-            bleeding = true;
-            GetComponentInChildren<ParticleSystem>().Play();
+            StartCoroutine(Bleed(1, 3, 10));
         }
     }
 
@@ -191,6 +177,21 @@ public class EnemyBase : MonoBehaviour
 
     }
 
+    //Bleeding Damage over Time effect
+    IEnumerator Bleed(float Duration, int Ticks, float DMG)
+    {
+        int currentCount = 0;
+        GetComponentInChildren<ParticleSystem>().Play();
+        while (currentCount < Ticks)
+        {
+            TakeDamage(DMG);
+            yield return new WaitForSeconds(Duration);
+            ++currentCount;
+        }
+        GetComponentInChildren<ParticleSystem>().Stop();
+    }
+
+    //Use this when applying damage so the health bar works correctly
     private void TakeDamage(float DmgVal)
     {
         //Divide for the localScale to work properly
@@ -205,6 +206,7 @@ public class EnemyBase : MonoBehaviour
         Debug.Log("New Health:" + Health);
     }
 
+    //Kills the enemy
     private void Kill()
     {
         if(Health <= 0)
