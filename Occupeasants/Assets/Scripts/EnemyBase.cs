@@ -112,6 +112,7 @@ public class EnemyBase : MonoBehaviour
         //Hit the player
         if (other.gameObject.CompareTag("Player"))
         {
+            
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
         }
@@ -147,7 +148,7 @@ public class EnemyBase : MonoBehaviour
         Debug.DrawLine(Player.transform.position, transform.position, Color.green);
 
         //Did the player come close enough?
-        if (distToPlayer <= 7)
+        if (distToPlayer <= 3)
         {
             if (!hitPlayer)
             {
@@ -160,7 +161,7 @@ public class EnemyBase : MonoBehaviour
         }
 
         //Player too far now
-        if (distToPlayer > 7)
+        if (distToPlayer > 3)
         {
             Status.GetComponent<SpriteRenderer>().sprite = Hunting;
             if (hasTreasure)
@@ -171,6 +172,7 @@ public class EnemyBase : MonoBehaviour
             {
                 Status.GetComponent<SpriteRenderer>().color = Color.yellow;
             }
+
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
         }
