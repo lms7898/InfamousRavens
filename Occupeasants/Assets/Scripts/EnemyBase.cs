@@ -8,8 +8,7 @@ public class EnemyBase : MonoBehaviour
     public float MoveSpeed;
     public GameObject Path;
     public GameObject Player;
-    public float currentTime;
-    public bool slowed = false;
+    
     public GameObject HealthBar;
     public GameObject Status;
 
@@ -19,12 +18,15 @@ public class EnemyBase : MonoBehaviour
     Node[] PathPoints;
     private Node Point;
 
-    float Timer;
+    private float STimer;
     int pointIndex = 0;
     int direction = 1;
     private float DefaultMS;
     private float Health = 100;
     private bool hasTreasure;
+    private float currentTime;
+    private bool slowed = false;
+    private float slowedSpeed;
     
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
@@ -34,6 +36,8 @@ public class EnemyBase : MonoBehaviour
     void Start()
     {
         //load the path and set the targets
+        Path = GameObject.Find("Path");
+        Player = GameObject.Find("Player");
         PathPoints = Path.GetComponentsInChildren<Node>();
         Point = PathPoints[pointIndex];
         currentTarget = Point.transform.position;
@@ -50,23 +54,21 @@ public class EnemyBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Timer = Time.fixedTime;
-
         //Checking the surroundings for alternative targets
         CheckSurroundings();
         Kill();
 
-        //For traps
+        //For slow effect
         if (slowed)
         {
-            MoveSpeed = 4;
-            if (Timer >= currentTime + 3)
+            MoveSpeed = slowedSpeed;
+            if (Time.fixedTime >= STimer)
             {
                 MoveSpeed = DefaultMS;
                 slowed = false;
                 GetComponent<SpriteRenderer>().color = Color.white;
                 Debug.Log("not trapped");
-                Debug.Log(Timer.ToString());
+                Debug.Log(Time.fixedTime);
             }
         }
     }
@@ -107,11 +109,30 @@ public class EnemyBase : MonoBehaviour
             currentTarget = Point.transform.position;
         }
 
+        //Hit the player
         if (other.gameObject.CompareTag("Player"))
         {
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
-            TakeDamage(10);
+        }
+
+
+        //Trap Type Checks
+        //Bear -- Init Damage + Slow
+        if(other.GetComponent<BearTrap>())
+        {
+            STimer = Time.fixedTime + other.GetComponent<TrapBase>().Duration;
+            slowed = true;
+            slowedSpeed = MoveSpeed / 2;
+            GetComponent<SpriteRenderer>().color = Color.blue;
+            Debug.Log("trapped");
+            Debug.Log(Time.fixedTime);
+        }
+
+        //Spikes -- Bleed Damage over Time
+        if(other.GetComponent<SpikeTrap>())
+        {
+            StartCoroutine(Bleed(1, 3, 10));
         }
     }
 
@@ -156,6 +177,21 @@ public class EnemyBase : MonoBehaviour
 
     }
 
+    //Bleeding Damage over Time effect
+    IEnumerator Bleed(float Duration, int Ticks, float DMG)
+    {
+        int currentCount = 0;
+        GetComponentInChildren<ParticleSystem>().Play();
+        while (currentCount < Ticks)
+        {
+            TakeDamage(DMG);
+            yield return new WaitForSeconds(Duration);
+            ++currentCount;
+        }
+        GetComponentInChildren<ParticleSystem>().Stop();
+    }
+
+    //Use this when applying damage so the health bar works correctly
     private void TakeDamage(float DmgVal)
     {
         //Divide for the localScale to work properly
@@ -170,6 +206,7 @@ public class EnemyBase : MonoBehaviour
         Debug.Log("New Health:" + Health);
     }
 
+    //Kills the enemy
     private void Kill()
     {
         if(Health <= 0)
