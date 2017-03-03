@@ -54,11 +54,7 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
     void Animate(float h, float v) {
-        bool walking = false;
-
-        if (moveX != 0 || moveY != 0) {
-            walking = true;
-        }
+        bool walking = moveX != 0 || moveY != 0;
 
         // raycast mouse to screen
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -66,67 +62,373 @@ public class PlayerMovement : MonoBehaviour {
         // z position is unnecessary in 2D
         mousePos.z = 0;
 
+        // check angle between player right vector
+        // and normalized distance between player position and mouse position
+        Vector3 targetDir = mousePos - transform.position;
+
+        // check if mouse y position is greater or less than players y position
+        float sign = (mousePos.y < transform.position.y) ? -1.0f : 1.0f; // allows for negative angles
+
+        // calculate angle between players right vector and the mouse position
+        float angle = Vector3.Angle(transform.right, targetDir) * sign;
+
         if (walking) {
-            anim.SetBool("walking", walking);
-            // check angle between player right vector
-            // and normalized distance between player position and mouse position
-            Vector3 targetDir = transform.position - mousePos;
-
-            // check if mouse y position is greater or less than players y position
-            // allows for negative angles
-            float sign = (mousePos.y < transform.position.y) ? -1.0f : 1.0f;
-
-            // calculate angle between players right vector and the mouse position
-            float angle = Vector3.Angle(transform.right, targetDir) * sign;
-
-            // set animation state trigger based on mouse position
-            if ((angle >= 0 && angle < 45) || angle <= 0 && angle > -45)
+            // right
+            if ((angle > 0 && angle < 22.5) || (angle < 0 && angle > -22.5))
             {
-                anim.SetTrigger("walkingLeft");
-                anim.ResetTrigger("walkingUp");
-                anim.ResetTrigger("walkingRight");
-                anim.ResetTrigger("walkingDown");
+                anim.SetBool("walkRight", true);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
 
                 // rotate combat trigger
-                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 270.0f));
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 90.0f));
             }
-            else if (angle >= 45 && angle < 135)
+            // diagonal back right
+            else if(angle > 22.5 && angle < 67.5)
             {
-                anim.SetTrigger("walkingUp");
-                anim.ResetTrigger("walkingLeft");
-                anim.ResetTrigger("walkingRight");
-                anim.ResetTrigger("walkingDown");
+                anim.SetBool("walkRB", true);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 135.0f));
+            }
+            // back
+            else if(angle > 67.5 && angle < 112.5)
+            {
+                anim.SetBool("walkBack", true);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
 
                 combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 180.0f));
             }
-            else if ((angle >= 135 && angle < 180) || (angle <= -135 && angle > -180))
+            // diagonal back left
+            else if(angle > 112.5 && angle < 157.5)
             {
-                anim.SetTrigger("walkingRight");
-                anim.ResetTrigger("walkingLeft");
-                anim.ResetTrigger("walkingUp");
-                anim.ResetTrigger("walkingDown");
+                anim.SetBool("walkLB", true);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
 
-                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 90.0f));
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 225.0f));
             }
-            else if (angle <= -45 && angle > -135)
+            // left
+            else if((angle > 112.5 && angle < 180) || (angle < -157.5 && angle > -180))
             {
-                anim.SetTrigger("walkingDown");
-                anim.ResetTrigger("walkingLeft");
-                anim.ResetTrigger("walkingUp");
-                anim.ResetTrigger("walkingRight");
+                anim.SetBool("walkLeft", true);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 270.0f));
+            }
+            // diagonal front right
+            else if(angle < -22.5 && angle > -67.5)
+            {
+                anim.SetBool("walkRF", true);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 45));
+            }
+            // front
+            else if(angle < -67.5 && angle > -112.5)
+            {
+                anim.SetBool("walkFront", true);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
 
                 combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
+            }
+            // diagonal front left
+            else if(angle < -112.5 && angle > -157.5)
+            {
+                anim.SetBool("walkLF", true);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 315.0f));
             }
         }
         else
         {
-            anim.SetBool("walking", false);
-            anim.ResetTrigger("walkingLeft");
-            anim.ResetTrigger("walkingUp");
-            anim.ResetTrigger("walkingRight");
-            anim.ResetTrigger("walkingDown");
+            // right
+            if ((angle > 0 && angle < 22.5) || (angle < 0 && angle > -22.5))
+            {
+                anim.SetBool("idleRight", true);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
 
-            combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0));
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 90.0f));
+            }
+            // diagonal back right
+            else if (angle > 22.5 && angle < 67.5)
+            {
+                anim.SetBool("diagIdleRB", true);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 135.0f));
+            }
+            // back
+            else if (angle > 67.5 && angle < 112.5)
+            {
+                anim.SetBool("idleBack", true);
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 180.0f));
+            }
+            // diagonal back left
+            else if (angle > 112.5 && angle < 157.5)
+            {
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", true);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 225.0f));
+            }
+            // left
+            else if ((angle > 157.5 && angle < 180) || (angle < -157.5 && angle > -180))
+            {
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", true);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 270.0f));
+            }
+            // diagonal front right
+            else if (angle < -22.5 && angle > -67.5)
+            {
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", true);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 45.0f));
+            }
+            // front
+            else if (angle < -67.5 && angle > -112.5)
+            {
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", true);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", false);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f));
+            }
+            // diagonal front left
+            else if (angle < -112.5 && angle > -157.5)
+            {
+                anim.SetBool("idleRight", false);
+                anim.SetBool("idleLeft", false);
+                anim.SetBool("idleFront", false);
+                anim.SetBool("idleBack", false);
+                anim.SetBool("diagIdleRF", false);
+                anim.SetBool("diagIdleRB", false);
+                anim.SetBool("diagIdleLF", true);
+                anim.SetBool("diagIdleLB", false);
+                anim.SetBool("walkRight", false);
+                anim.SetBool("walkLeft", false);
+                anim.SetBool("walkFront", false);
+                anim.SetBool("walkBack", false);
+                anim.SetBool("walkRF", false);
+                anim.SetBool("walkRB", false);
+                anim.SetBool("walkLF", false);
+                anim.SetBool("walkLB", false);
+
+                combatObject.transform.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, 315.0f));
+            }
         }
     }
 
@@ -137,8 +439,12 @@ public class PlayerMovement : MonoBehaviour {
         attacking = true;
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.tag == "Enemy" && attacking == true) {
+    void OnTriggerStay2D(Collider2D other) {
+        BoxCollider2D[] colls = GetComponentsInChildren<BoxCollider2D>();
+        print(colls.Length);
+
+        foreach(Collider2D col in colls)
+        if (other.gameObject.tag == "Enemy" && attacking == true && col.name == "CombatCollider") {
             Destroy(other.gameObject);
         }
     }
