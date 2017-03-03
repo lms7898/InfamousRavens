@@ -6,31 +6,16 @@ using System.Text.RegularExpressions;
 public class GridManager : MonoBehaviour {
 
     public GameObject floor_tile;
-    public string fileName;
+    public GameObject level;
 
 	// Use this for initialization
 	void Start () {
 
         string[][] textFile = ReadLevel("D:/Profiles/may4028/Documents/InfamousRavens/Occupeasants/Assets/exampleLevel.txt");
+        float x = level.transform.position.x - level.GetComponent<Renderer>().bounds.size.x / 2;
+        float y = level.transform.position.y - level.GetComponent<Renderer>().bounds.size.y / 2;
 
-        for (int i = 0; i < textFile.Length; i++)
-        {
-            for (int j = 0; j < textFile[i].Length; j++)
-            {
-                Instantiate(floor_tile);
-                floor_tile.transform.position = new Vector3(i * 2, j * 2, -4);
-                if (textFile[i][j] == "1")
-                {
-                    floor_tile.GetComponent<SpriteRenderer>().color = Color.green;
-                } 
-                else if (textFile[i][j] == "0")
-                {
-                    floor_tile.GetComponent<SpriteRenderer>().color = Color.black;
-                }
-
-            }
-        }
-        
+        LayoutGrid(textFile, x, y);
 	}
 	
 	// Update is called once per frame
@@ -56,5 +41,32 @@ public class GridManager : MonoBehaviour {
             level[i] = lineInfo;
         }
         return level;
+    }
+
+    void LayoutGrid(string[][] textFile, float startX, float startY)
+    {
+        for (int i = 0; i < textFile.Length; i++)
+        {
+            for (int j = 0; j < textFile[i].Length; j++)
+            {
+                Instantiate(floor_tile);
+                floor_tile.transform.position = new Vector3(startX + j * 2, startY + i * 2, -4);
+                if (textFile[i][j] == "1")
+                {
+                    floor_tile.GetComponent<SpriteRenderer>().color = Color.green;
+                    Color tmp = floor_tile.GetComponent<SpriteRenderer>().color;
+                    tmp.a = 0.5f;
+                    floor_tile.GetComponent<SpriteRenderer>().color = tmp;
+                }
+                else if (textFile[i][j] == "0")
+                {
+                    floor_tile.GetComponent<SpriteRenderer>().color = Color.black;
+                    Color tmp = floor_tile.GetComponent<SpriteRenderer>().color;
+                    tmp.a = 0.0f;
+                    floor_tile.GetComponent<SpriteRenderer>().color = tmp;
+                }
+
+            }
+        }
     }
 }
