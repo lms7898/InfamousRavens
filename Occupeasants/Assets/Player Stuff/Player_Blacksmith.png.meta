@@ -1,7 +1,7 @@
 fileFormatVersion: 2
-guid: 7d77d9c8b220d784389b6979a8af6d8f
-timeCreated: 1487189365
-licenseType: Pro
+guid: b68e425ac0c8fab408c746f8fdb509b4
+timeCreated: 1488490396
+licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Player_Blacksmith_0
@@ -16,6 +16,18 @@ TextureImporter:
     21300018: Player_Blacksmith_9
     21300020: Player_Blacksmith_10
     21300022: Player_Blacksmith_11
+    21300024: Player_Blacksmith_12
+    21300026: Player_Blacksmith_13
+    21300028: Player_Blacksmith_14
+    21300030: Player_Blacksmith_15
+    21300032: Player_Blacksmith_16
+    21300034: Player_Blacksmith_17
+    21300036: Player_Blacksmith_18
+    21300038: Player_Blacksmith_19
+    21300040: Player_Blacksmith_20
+    21300042: Player_Blacksmith_21
+    21300044: Player_Blacksmith_22
+    21300046: Player_Blacksmith_23
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -78,14 +90,6 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
-  - buildTarget: Android
-    maxTextureSize: 2048
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -94,7 +98,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 376
+        y: 858
         width: 78
         height: 113
       alignment: 0
@@ -107,7 +111,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 116
-        y: 377
+        y: 859
         width: 79
         height: 114
       alignment: 0
@@ -120,7 +124,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 234
-        y: 376
+        y: 858
         width: 78
         height: 113
       alignment: 0
@@ -133,7 +137,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 7
-        y: 249
+        y: 731
         width: 70
         height: 115
       alignment: 0
@@ -146,7 +150,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 123
-        y: 251
+        y: 733
         width: 70
         height: 116
       alignment: 0
@@ -159,7 +163,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 243
-        y: 249
+        y: 731
         width: 69
         height: 115
       alignment: 0
@@ -172,7 +176,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 126
+        y: 608
         width: 70
         height: 115
       alignment: 0
@@ -185,7 +189,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 121
-        y: 128
+        y: 610
         width: 70
         height: 116
       alignment: 0
@@ -198,7 +202,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 237
-        y: 126
+        y: 608
         width: 70
         height: 115
       alignment: 0
@@ -211,7 +215,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 482
         width: 78
         height: 116
       alignment: 0
@@ -224,7 +228,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 117
-        y: 2
+        y: 484
         width: 79
         height: 114
       alignment: 0
@@ -237,9 +241,165 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 234
-        y: 0
+        y: 482
         width: 78
         height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 358
+        width: 72
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_13
+      rect:
+        serializedVersion: 2
+        x: 121
+        y: 358
+        width: 75
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_14
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 356
+        width: 79
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 238
+        width: 79
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_16
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 240
+        width: 75
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_17
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 240
+        width: 72
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 120
+        width: 73
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_19
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 119
+        width: 74
+        height: 117
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_20
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 120
+        width: 77
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 77
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_22
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 0
+        width: 74
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Player_Blacksmith_23
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 0
+        width: 73
+        height: 114
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
