@@ -11,7 +11,7 @@ public class GridManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        string[][] textFile = ReadLevel("D:/Profiles/may4028/Documents/InfamousRavens/Occupeasants/Assets/exampleLevel.txt");
+        string[][] textFile = ReadLevel("exampleLevel.txt");
 
         for (int i = 0; i < textFile.Length; i++)
         {
