@@ -13,7 +13,7 @@ public class GridManager : MonoBehaviour {
 
         string[][] textFile = ReadLevel("D:/Profiles/may4028/Documents/InfamousRavens/Occupeasants/Assets/exampleLevel.txt");
         float x = level.transform.position.x - level.GetComponent<Renderer>().bounds.size.x / 2;
-        float y = level.transform.position.y - level.GetComponent<Renderer>().bounds.size.y / 2;
+        float y = level.transform.position.y - level.GetComponent<Renderer>().bounds.size.y / 2 - 0.7f;
 
         LayoutGrid(textFile, x, y);
 	}
@@ -27,7 +27,6 @@ public class GridManager : MonoBehaviour {
      * Reads in the level from a text file
      * Code from http://answers.unity3d.com/questions/577889/create-level-based-on-xmltxt-file.html
      * */
-
     string[][] ReadLevel(string file)
     {
         string levelText = System.IO.File.ReadAllText(file);
@@ -43,6 +42,7 @@ public class GridManager : MonoBehaviour {
         return level;
     }
 
+    // Reads the text files in (upside down)
     void LayoutGrid(string[][] textFile, float startX, float startY)
     {
         for (int i = 0; i < textFile.Length; i++)
