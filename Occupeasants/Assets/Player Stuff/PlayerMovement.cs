@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour {
 
     public float speed = 4f;
     public bool attacking;
+    public float Health;
+    public GameObject HealthBar;
 
     private float moveX;
     private float moveY;
@@ -437,6 +439,20 @@ public class PlayerMovement : MonoBehaviour {
         sprite.color = Color.green;
 
         attacking = true;
+    }
+
+    public void TakeDamage(float DmgVal)
+    {
+        //Divide for the localScale to work properly
+        Health = (Health - DmgVal) / 100;
+        HealthBar.transform.localScale = new Vector3(
+            Mathf.Clamp(Health, 0f, 1f),
+            HealthBar.transform.localScale.y,
+            HealthBar.transform.localScale.z);
+
+        //Re-multiply to retain an accurate measure of health
+        Health *= 100;
+        Debug.Log("New Health:" + Health);
     }
 
     void OnTriggerStay2D(Collider2D other) {
