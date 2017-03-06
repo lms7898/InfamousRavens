@@ -155,7 +155,7 @@ public class EnemyBase : MonoBehaviour
             if (!hitPlayer)
             {
                 //Go get em!
-                currentTarget = Player.transform.position + (Mathf.PI * Mathf.Pow(Vector3.Distance(Player.transform.position, new Vector3(2,2,0)),2));
+                currentTarget = Player.transform.position;
                 Status.GetComponent<SpriteRenderer>().sprite = Attacking;
                 Status.GetComponent<SpriteRenderer>().color = Color.red;
                 Debug.DrawLine(Player.transform.position, transform.position, Color.red);
