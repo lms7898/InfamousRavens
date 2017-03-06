@@ -27,8 +27,6 @@ public class EnemyBase : MonoBehaviour
     private float currentTime;
     private bool slowed = false;
     private float slowedSpeed;
-    private float GlobalAttackCD = 3;
-    public float Damage;
     
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
@@ -115,10 +113,14 @@ public class EnemyBase : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             
 =======
             other.GetComponent<PlayerMovement>().TakeDamage(Damage);
 >>>>>>> refs/remotes/origin/Development
+=======
+            
+>>>>>>> 631a42b39322e5cd94fb5720caac2ef901d614e3
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
         }
@@ -155,10 +157,14 @@ public class EnemyBase : MonoBehaviour
 
         //Did the player come close enough?
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (distToPlayer <= 3)
 =======
         if (distToPlayer <= 5)
 >>>>>>> refs/remotes/origin/Development
+=======
+        if (distToPlayer <= 3)
+>>>>>>> 631a42b39322e5cd94fb5720caac2ef901d614e3
         {
             if (!hitPlayer)
             {
@@ -172,10 +178,14 @@ public class EnemyBase : MonoBehaviour
 
         //Player too far now
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (distToPlayer > 3)
 =======
         if (distToPlayer > 5)
 >>>>>>> refs/remotes/origin/Development
+=======
+        if (distToPlayer > 3)
+>>>>>>> 631a42b39322e5cd94fb5720caac2ef901d614e3
         {
             Status.GetComponent<SpriteRenderer>().sprite = Hunting;
             if (hasTreasure)
