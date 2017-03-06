@@ -6,6 +6,7 @@ public class EnemyBase : MonoBehaviour
 {
 
     public float MoveSpeed;
+    public float Damage;
     public GameObject Path;
     public GameObject Player;
     
@@ -54,6 +55,9 @@ public class EnemyBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //sprite sheet animation conditions
+        Animate();
+
         //Checking the surroundings for alternative targets
         CheckSurroundings();
         Kill();
@@ -78,21 +82,19 @@ public class EnemyBase : MonoBehaviour
         //Pathing
         if (other.GetComponentInChildren<Node>())
         {
-            if (other.GetComponent<Collider2D>().IsTouching(this.GetComponent<Collider2D>()))
+            //Direction to move on the path
+            if (pointIndex >= PathPoints.Length - 1)
             {
-                //Direction to move on the path
-                if (pointIndex >= PathPoints.Length - 1)
-                {
-                    direction = -1;
-                }
-                if (pointIndex <= 0)
-                {
-                    direction = 1;
-                }
-                hitPlayer = false;
+                direction = -1;
             }
+            if (pointIndex <= 0)
+            {
+                direction = 1;
+            }
+            hitPlayer = false;
 
-            if(other.GetComponentInChildren<Chest>())
+
+            if (other.GetComponentInChildren<Chest>())
             {
                 hasTreasure = true;
                 Status.GetComponent<SpriteRenderer>().color = Color.red;
@@ -100,27 +102,23 @@ public class EnemyBase : MonoBehaviour
             }
 
             //Updating the enemy goal point
-            if (direction == 1)
+            if (direction > 0)
             {
                 ++pointIndex;
             }
-            else { --pointIndex; }
+            else if (direction < 0)
+            {
+                --pointIndex;
+            }
             Point = PathPoints[pointIndex];
             currentTarget = Point.transform.position;
         }
+        
 
         //Hit the player
         if (other.gameObject.CompareTag("Player"))
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-            
-=======
             other.GetComponent<PlayerMovement>().TakeDamage(Damage);
->>>>>>> refs/remotes/origin/Development
-=======
-            
->>>>>>> 631a42b39322e5cd94fb5720caac2ef901d614e3
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
         }
@@ -154,17 +152,10 @@ public class EnemyBase : MonoBehaviour
         float distToPlayer;
         distToPlayer = Vector3.Distance(transform.position, Player.transform.position);
         Debug.DrawLine(Player.transform.position, transform.position, Color.green);
+        Debug.DrawLine(transform.position, currentTarget, Color.gray);
 
         //Did the player come close enough?
-<<<<<<< HEAD
-<<<<<<< HEAD
         if (distToPlayer <= 3)
-=======
-        if (distToPlayer <= 5)
->>>>>>> refs/remotes/origin/Development
-=======
-        if (distToPlayer <= 3)
->>>>>>> 631a42b39322e5cd94fb5720caac2ef901d614e3
         {
             if (!hitPlayer)
             {
@@ -177,15 +168,7 @@ public class EnemyBase : MonoBehaviour
         }
 
         //Player too far now
-<<<<<<< HEAD
-<<<<<<< HEAD
         if (distToPlayer > 3)
-=======
-        if (distToPlayer > 5)
->>>>>>> refs/remotes/origin/Development
-=======
-        if (distToPlayer > 3)
->>>>>>> 631a42b39322e5cd94fb5720caac2ef901d614e3
         {
             Status.GetComponent<SpriteRenderer>().sprite = Hunting;
             if (hasTreasure)
@@ -238,6 +221,78 @@ public class EnemyBase : MonoBehaviour
         if(Health <= 0)
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void Animate()
+    {
+        Vector3 myPos = transform.position;
+        Vector3 targetPos = currentTarget;
+
+        //idle
+        if (myPos.y == targetPos.y && myPos.x == targetPos.x)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 0);
+        }
+
+        //Face left
+        if (myPos.y <= targetPos.y + 2
+            && myPos.y >= targetPos.y - 2
+            && myPos.x > targetPos.x)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 2);
+        }
+
+        //Face right
+        if (myPos.y <= targetPos.y + 2
+            && myPos.y >= targetPos.y - 2
+            && myPos.x < targetPos.x)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 1);
+        }
+
+        //Face down
+        if (myPos.y > targetPos.y
+            && myPos.x <= targetPos.x + 2
+            && myPos.x >= targetPos.x - 2)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 4);
+        }
+
+        //Face up
+        if (myPos.y < targetPos.y
+            && myPos.x <= targetPos.x + 2
+            && myPos.x >= targetPos.x - 2)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 3);
+        }
+
+        //Face up-left
+        if (myPos.y < targetPos.y
+            && myPos.x < targetPos.x - 3)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 8);
+        }
+
+        //Face up-right
+        if (myPos.y < targetPos.y
+            && myPos.x > targetPos.x + 3)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 7);
+        }
+
+        //Face down-left
+        if (myPos.y > targetPos.y
+            && myPos.x < targetPos.x - 3)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 6);
+        }
+
+        //Face down-right
+        if (myPos.y > targetPos.y
+            && myPos.x > targetPos.x + 3)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 5);
         }
     }
 
