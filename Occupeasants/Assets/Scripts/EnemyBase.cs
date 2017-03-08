@@ -227,70 +227,55 @@ public class EnemyBase : MonoBehaviour
     private void Animate()
     {
         Vector3 myPos = transform.position;
-        Vector3 targetPos = currentTarget;
-
-        //idle
-        if (myPos.y == targetPos.y && myPos.x == targetPos.x)
-        {
-            GetComponent<Animator>().SetInteger("Direction", 0);
-        }
-
+        Vector3 targetPos = currentTarget - myPos;
+        currentTarget.z = 0;
+        float multiplier = (targetPos.y < transform.position.y) ? -1.0f : 1.0f;
+        float angle = Vector3.Angle(transform.right,targetPos) * multiplier;
+        
         //Face left
-        if (myPos.y <= targetPos.y + 2
-            && myPos.y >= targetPos.y - 2
-            && myPos.x > targetPos.x)
+        if ((angle > 112.5 && angle < 180) || (angle < -157.5 && angle > -180))
         {
             GetComponent<Animator>().SetInteger("Direction", 2);
         }
 
         //Face right
-        if (myPos.y <= targetPos.y + 2
-            && myPos.y >= targetPos.y - 2
-            && myPos.x < targetPos.x)
+        if ((angle > 0 && angle < 22.5) || (angle < 0 && angle > -22.5))
         {
             GetComponent<Animator>().SetInteger("Direction", 1);
         }
 
         //Face down
-        if (myPos.y > targetPos.y
-            && myPos.x <= targetPos.x + 2
-            && myPos.x >= targetPos.x - 2)
+        if (angle < -67.5 && angle > -112.5)
         {
             GetComponent<Animator>().SetInteger("Direction", 4);
         }
 
         //Face up
-        if (myPos.y < targetPos.y
-            && myPos.x <= targetPos.x + 2
-            && myPos.x >= targetPos.x - 2)
+        if (angle > 67.5 && angle < 112.5)
         {
             GetComponent<Animator>().SetInteger("Direction", 3);
         }
 
         //Face up-left
-        if (myPos.y < targetPos.y
-            && myPos.x < targetPos.x - 3)
+        if (angle > 112.5 && angle < 157.5)
         {
             GetComponent<Animator>().SetInteger("Direction", 8);
         }
 
         //Face up-right
-        if (myPos.y < targetPos.y
-            && myPos.x > targetPos.x + 3)
+        if (angle > 22.5 && angle < 67.5)
         {
             GetComponent<Animator>().SetInteger("Direction", 7);
         }
 
         //Face down-left
-        if (myPos.y > targetPos.y
-            && myPos.x < targetPos.x - 3)
+        if (angle < -112.5 && angle > -157.5)
         {
             GetComponent<Animator>().SetInteger("Direction", 6);
         }
 
         //Face down-right
-        if (myPos.y > targetPos.y
-            && myPos.x > targetPos.x + 3)
+        if (angle < -22.5 && angle > -67.5)
         {
             GetComponent<Animator>().SetInteger("Direction", 5);
         }
