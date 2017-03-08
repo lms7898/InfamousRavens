@@ -49,6 +49,7 @@ public class EnemyBase : MonoBehaviour
     void FixedUpdate()
     {
         //Moving our enemy based on the public MoveSpeed variable
+        CheckSurroundings();
         transform.position += (currentTarget - transform.position).normalized * MoveSpeed * Time.deltaTime;
     }
     
@@ -57,9 +58,6 @@ public class EnemyBase : MonoBehaviour
     {
         //sprite sheet animation conditions
         Animate();
-
-        //Checking the surroundings for alternative targets
-        CheckSurroundings();
         Kill();
 
         //For slow effect
@@ -116,11 +114,9 @@ public class EnemyBase : MonoBehaviour
         
 
         //Hit the player
-        if (other.gameObject.CompareTag("Player"))
+        if (other.GetComponent<PlayerMovement>())
         {
-            other.GetComponent<PlayerMovement>().TakeDamage(Damage);
-            currentTarget = PathPoints[pointIndex].transform.position;
-            hitPlayer = true;
+            StartCoroutine(Attack(0.5f, 1, Damage));
         }
 
 
@@ -155,7 +151,7 @@ public class EnemyBase : MonoBehaviour
         Debug.DrawLine(transform.position, currentTarget, Color.gray);
 
         //Did the player come close enough?
-        if (distToPlayer <= 3)
+        if (distToPlayer <= 5)
         {
             if (!hitPlayer)
             {
@@ -168,7 +164,7 @@ public class EnemyBase : MonoBehaviour
         }
 
         //Player too far now
-        if (distToPlayer > 3)
+        if (distToPlayer > 5)
         {
             Status.GetComponent<SpriteRenderer>().sprite = Hunting;
             if (hasTreasure)
@@ -184,6 +180,20 @@ public class EnemyBase : MonoBehaviour
             hitPlayer = true;
         }
 
+    }
+
+    //Attack
+    IEnumerator Attack(float Duration, int Ticks, float DMG)
+    {
+        int currentCount = 0;
+        while(currentCount < Ticks)
+        {
+            Player.GetComponent<PlayerMovement>().TakeDamage(DMG);
+            yield return new WaitForSeconds(Duration);
+            ++currentCount;
+        }
+        currentTarget = PathPoints[pointIndex].transform.position;
+        hitPlayer = true;
     }
 
     //Bleeding Damage over Time effect
@@ -224,6 +234,7 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
+    //Managing the animation states
     private void Animate()
     {
         Vector3 myPos = transform.position;
