@@ -10,6 +10,9 @@ public class CellManager : MonoBehaviour {
     private GameObject cellBear;
     private GameObject cellSpike;
 
+    private GameObject phaseManager;
+    private PhaseManager phaseScript;
+
     string status;
     Color tmp;
 
@@ -31,27 +34,32 @@ public class CellManager : MonoBehaviour {
         cellSpike.transform.parent = this.transform;
         cellSpike.transform.localPosition = Vector3.zero;
         cellSpike.active = false;
+
+        phaseManager = GameObject.Find("PhaseManager");
+        phaseScript = phaseManager.GetComponent<PhaseManager>();
     }
 
     // Change trap type
 	void OnMouseDown()
     {
-        Debug.Log(status);
-        if (status == "empty" && this.gameObject.GetComponent<SpriteRenderer>().color != tmp)
-        {
-            status = "bear";
-            cellBear.active = true;
-        }
-        else if (status == "bear")
-        {
-            status = "spike";
-            cellBear.active = false;
-            cellSpike.active = true;
-        }
-        else if (status == "spike")
-        {
-            status = "empty";
-            cellSpike.active = false;
+        if (phaseScript.gState == PhaseManager.GameState.prepPhase) {
+            Debug.Log(status);
+            if (status == "empty" && this.gameObject.GetComponent<SpriteRenderer>().color != tmp)
+            {
+                status = "bear";
+                cellBear.active = true;
+            }
+            else if (status == "bear")
+            {
+                status = "spike";
+                cellBear.active = false;
+                cellSpike.active = true;
+            }
+            else if (status == "spike")
+            {
+                status = "empty";
+                cellSpike.active = false;
+            }
         }
     }
 }
