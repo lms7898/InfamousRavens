@@ -6,6 +6,7 @@ public class EnemyBase : MonoBehaviour
 {
 
     public float MoveSpeed;
+    public float Damage;
     public GameObject Path;
     public GameObject Player;
     
@@ -27,8 +28,6 @@ public class EnemyBase : MonoBehaviour
     private float currentTime;
     private bool slowed = false;
     private float slowedSpeed;
-    private float GlobalAttackCD = 3;
-    public float Damage;
     
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
@@ -50,14 +49,15 @@ public class EnemyBase : MonoBehaviour
     void FixedUpdate()
     {
         //Moving our enemy based on the public MoveSpeed variable
+        CheckSurroundings();
         transform.position += (currentTarget - transform.position).normalized * MoveSpeed * Time.deltaTime;
     }
     
     // Update is called once per frame
     void Update()
     {
-        //Checking the surroundings for alternative targets
-        CheckSurroundings();
+        //sprite sheet animation conditions
+        Animate();
         Kill();
 
         //For slow effect
@@ -80,21 +80,19 @@ public class EnemyBase : MonoBehaviour
         //Pathing
         if (other.GetComponentInChildren<Node>())
         {
-            if (other.GetComponent<Collider2D>().IsTouching(this.GetComponent<Collider2D>()))
+            //Direction to move on the path
+            if (pointIndex >= PathPoints.Length - 1)
             {
-                //Direction to move on the path
-                if (pointIndex >= PathPoints.Length - 1)
-                {
-                    direction = -1;
-                }
-                if (pointIndex <= 0)
-                {
-                    direction = 1;
-                }
-                hitPlayer = false;
+                direction = -1;
             }
+            if (pointIndex <= 0)
+            {
+                direction = 1;
+            }
+            hitPlayer = false;
 
-            if(other.GetComponentInChildren<Chest>())
+
+            if (other.GetComponentInChildren<Chest>())
             {
                 hasTreasure = true;
                 Status.GetComponent<SpriteRenderer>().color = Color.red;
@@ -102,21 +100,23 @@ public class EnemyBase : MonoBehaviour
             }
 
             //Updating the enemy goal point
-            if (direction == 1)
+            if (direction > 0)
             {
                 ++pointIndex;
             }
-            else { --pointIndex; }
+            else if (direction < 0)
+            {
+                --pointIndex;
+            }
             Point = PathPoints[pointIndex];
             currentTarget = Point.transform.position;
         }
+        
 
         //Hit the player
-        if (other.gameObject.CompareTag("Player"))
+        if (other.GetComponent<PlayerMovement>())
         {
-            other.GetComponent<PlayerMovement>().TakeDamage(Damage);
-            currentTarget = PathPoints[pointIndex].transform.position;
-            hitPlayer = true;
+            StartCoroutine(Attack(0.5f, 1, Damage));
         }
 
 
@@ -148,6 +148,7 @@ public class EnemyBase : MonoBehaviour
         float distToPlayer;
         distToPlayer = Vector3.Distance(transform.position, Player.transform.position);
         Debug.DrawLine(Player.transform.position, transform.position, Color.green);
+        Debug.DrawLine(transform.position, currentTarget, Color.gray);
 
         //Did the player come close enough?
         if (distToPlayer <= 5)
@@ -174,10 +175,25 @@ public class EnemyBase : MonoBehaviour
             {
                 Status.GetComponent<SpriteRenderer>().color = Color.yellow;
             }
+
             currentTarget = PathPoints[pointIndex].transform.position;
             hitPlayer = true;
         }
 
+    }
+
+    //Attack
+    IEnumerator Attack(float Duration, int Ticks, float DMG)
+    {
+        int currentCount = 0;
+        while(currentCount < Ticks)
+        {
+            Player.GetComponent<PlayerMovement>().TakeDamage(DMG);
+            yield return new WaitForSeconds(Duration);
+            ++currentCount;
+        }
+        currentTarget = PathPoints[pointIndex].transform.position;
+        hitPlayer = true;
     }
 
     //Bleeding Damage over Time effect
@@ -215,6 +231,64 @@ public class EnemyBase : MonoBehaviour
         if(Health <= 0)
         {
             Destroy(gameObject);
+        }
+    }
+
+    //Managing the animation states
+    private void Animate()
+    {
+        Vector3 myPos = transform.position;
+        Vector3 targetPos = currentTarget - myPos;
+        currentTarget.z = 0;
+        float multiplier = (targetPos.y < transform.position.y) ? -1.0f : 1.0f;
+        float angle = Vector3.Angle(transform.right,targetPos) * multiplier;
+        
+        //Face left
+        if ((angle > 112.5 && angle < 180) || (angle < -157.5 && angle > -180))
+        {
+            GetComponent<Animator>().SetInteger("Direction", 2);
+        }
+
+        //Face right
+        if ((angle > 0 && angle < 22.5) || (angle < 0 && angle > -22.5))
+        {
+            GetComponent<Animator>().SetInteger("Direction", 1);
+        }
+
+        //Face down
+        if (angle < -67.5 && angle > -112.5)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 4);
+        }
+
+        //Face up
+        if (angle > 67.5 && angle < 112.5)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 3);
+        }
+
+        //Face up-left
+        if (angle > 112.5 && angle < 157.5)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 8);
+        }
+
+        //Face up-right
+        if (angle > 22.5 && angle < 67.5)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 7);
+        }
+
+        //Face down-left
+        if (angle < -112.5 && angle > -157.5)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 6);
+        }
+
+        //Face down-right
+        if (angle < -22.5 && angle > -67.5)
+        {
+            GetComponent<Animator>().SetInteger("Direction", 5);
         }
     }
 
