@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PhaseManager : MonoBehaviour {
 
-    public float prepTimer = 10.0f;
+    private float prepTimer = 5.0f;
 
-    private GameObject spawner;
-    private GameObject tileManager;
+    public GameObject spawner;
 
     public enum GameState{
         prepPhase,
@@ -21,14 +20,15 @@ public class PhaseManager : MonoBehaviour {
         // initialize gamestate
         gState = GameState.prepPhase;
 
-        // deactivate spawner
-        spawner = GameObject.Find("Spawner");
-        spawner.SetActive(false);
+        // instantiate and deactivate spawner
+		spawner = Instantiate(spawner);
+		spawner.SetActive (false);
     }
 	
 	// Update is called once per frame
 	void Update () {
         prepTimer -= Time.deltaTime;
+		print (prepTimer);
 
         if (prepTimer <= 0.0f && gState == GameState.prepPhase){
             // change game phase
