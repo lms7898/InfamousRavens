@@ -23,7 +23,6 @@ public class PhaseManager : MonoBehaviour {
 
         // deactivate spawner
         spawner = GameObject.Find("Spawner");
-        spawner.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -35,7 +34,6 @@ public class PhaseManager : MonoBehaviour {
             gState = GameState.combatPhase;
 
             // activate spawner
-            spawner.SetActive(true);
         }
 	}
 }
