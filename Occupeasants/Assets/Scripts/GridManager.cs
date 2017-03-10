@@ -15,6 +15,7 @@ public class GridManager : MonoBehaviour {
         float y = level.transform.position.y - level.GetComponent<Renderer>().bounds.size.y / 2 - 0.7f;
 
         LayoutGrid(textFile, x, y);
+        
 	}
 	
 	// Update is called once per frame

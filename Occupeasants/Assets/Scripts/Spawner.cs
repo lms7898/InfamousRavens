@@ -5,17 +5,28 @@ using UnityEngine;
 public class Spawner : MonoBehaviour {
 
     public GameObject Enemy;
+    public int SpawnTotal;
+    private bool active;
 
-	// Use this for initialization
-	void Start () {
-        StartCoroutine(Spawn(Enemy, 2, 3));
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
+    // Use this for initialization
+    void Start()
+    {
+        Invoke("Activate", GameObject.Find("PhaseManager").GetComponent<PhaseManager>().prepTimer);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    private void Activate()
+    {
+        StartCoroutine(Spawn(Enemy, 2, SpawnTotal));
+    }
+
+    
     IEnumerator Spawn(GameObject enemy, float interval, int numEnemies)
     {
         int currentCount = 0;
@@ -25,6 +36,7 @@ public class Spawner : MonoBehaviour {
             yield return new WaitForSeconds(2);
             ++currentCount;
         }
+        active = false;
     }
 
 }

@@ -457,7 +457,6 @@ public class PlayerMovement : MonoBehaviour {
 
     void OnTriggerStay2D(Collider2D other) {
         BoxCollider2D[] colls = GetComponentsInChildren<BoxCollider2D>();
-        print(colls.Length);
 
         foreach(Collider2D col in colls)
         if (other.gameObject.tag == "Enemy" && attacking == true && col.name == "CombatCollider") {
