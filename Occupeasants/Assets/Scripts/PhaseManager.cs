@@ -30,7 +30,7 @@ public class PhaseManager : MonoBehaviour {
 		numTraps = 6;
 
         // set prep timer
-        prepTimer = 1.0f;
+        prepTimer = 7.0f;
 
         // set max kills
         maxKills = 3;

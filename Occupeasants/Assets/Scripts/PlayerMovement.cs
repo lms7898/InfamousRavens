@@ -49,14 +49,22 @@ public class PlayerMovement : MonoBehaviour {
 
         Animate(moveX, moveY);
 
-        if (Input.GetMouseButtonDown(0) && attacking == false) {
-            Attack();
-            attacking = true;
-        }
-        if (Input.GetMouseButtonUp(0)) {
-            attacking = false;
-            sprite.color = Color.white;
-        }
+		// If game is in combat phase
+		// If left mouse button is down and player is not already attacking
+		if (Input.GetMouseButtonDown (0)) {
+			if (phaseScript.gState == PhaseManager.GameState.combatPhase && attacking == false) {
+				Attack ();
+			}
+		} else {
+			attacking = false;
+		}
+
+
+		if (attacking) {
+			sprite.color = Color.green;
+		} else {
+			sprite.color = Color.white;
+		}
 	}
 
     void Animate(float h, float v) {
@@ -439,12 +447,9 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     void Attack() {
-        // Placeholder until we have attack animation
-        sprite.color = Color.green;
+		attacking = true;
 
         print("Kills: " + numKills);
-
-        attacking = false;
     }
 
     public void TakeDamage(float DmgVal)
@@ -465,7 +470,7 @@ public class PlayerMovement : MonoBehaviour {
         BoxCollider2D[] colls = GetComponentsInChildren<BoxCollider2D>();
 
         foreach (Collider2D col in colls) {
-            if (other.gameObject.tag == "Enemy" && attacking == true) {
+			if (other.gameObject.tag == "Enemy" && attacking == true && col.name == "CombatCollider") {
                 Destroy(other.gameObject);
                 numKills++;
             }
