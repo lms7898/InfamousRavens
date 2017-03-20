@@ -200,14 +200,14 @@ public class EnemyBase : MonoBehaviour
     IEnumerator Bleed(float Duration, int Ticks, float DMG)
     {
         int currentCount = 0;
-        GetComponentInChildren<ParticleSystem>().Play();
+        GetComponentInChildren<Animator>().SetInteger("EffectType",1);
         while (currentCount < Ticks)
         {
             TakeDamage(DMG);
             yield return new WaitForSeconds(Duration);
             ++currentCount;
         }
-        GetComponentInChildren<ParticleSystem>().Stop();
+        GetComponentInChildren<Animator>().SetInteger("EffectType", 0);
     }
 
     //Use this when applying damage so the health bar works correctly
