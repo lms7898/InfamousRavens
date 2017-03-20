@@ -3,30 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
-
-    public float speed = 4f;
     public bool attacking;
     public float Health;
+    public int numKills;
+
     public GameObject HealthBar;
 
     private float moveX;
     private float moveY;
+    private float speed;
 
     private Rigidbody2D playerBody;
     private SpriteRenderer sprite;
-
     private Animator anim;
-
     private GameObject combatObject;
+    private PhaseManager phaseScript;
 
 
     // Use this for initialization
     void Start () {
+        speed = 4.0f;
+        numKills = 0;
         attacking = false;
         playerBody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
         combatObject = GameObject.Find("CombatParent");
+        phaseScript = GameObject.Find("PhaseManager").GetComponent<PhaseManager>();
 	}
 	
 	// Update is called once per frame
@@ -46,13 +49,14 @@ public class PlayerMovement : MonoBehaviour {
 
         Animate(moveX, moveY);
 
-        if (Input.GetKey("space"))
+        if (Input.GetMouseButtonDown(0) && attacking == false) {
             Attack();
-        else {
+            attacking = true;
+        }
+        if (Input.GetMouseButtonUp(0)) {
             attacking = false;
             sprite.color = Color.white;
         }
-
 	}
 
     void Animate(float h, float v) {
@@ -438,7 +442,9 @@ public class PlayerMovement : MonoBehaviour {
         // Placeholder until we have attack animation
         sprite.color = Color.green;
 
-        attacking = true;
+        print("Kills: " + numKills);
+
+        attacking = false;
     }
 
     public void TakeDamage(float DmgVal)
@@ -455,12 +461,14 @@ public class PlayerMovement : MonoBehaviour {
         Debug.Log("New Health:" + Health);
     }
 
-    void OnTriggerStay2D(Collider2D other) {
+    void OnTriggerEnter2D(Collider2D other) {
         BoxCollider2D[] colls = GetComponentsInChildren<BoxCollider2D>();
 
-        foreach(Collider2D col in colls)
-        if (other.gameObject.tag == "Enemy" && attacking == true && col.name == "CombatCollider") {
-            Destroy(other.gameObject);
+        foreach (Collider2D col in colls) {
+            if (other.gameObject.tag == "Enemy" && attacking == true) {
+                Destroy(other.gameObject);
+                numKills++;
+            }
         }
     }
 }

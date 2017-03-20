@@ -43,12 +43,11 @@ public class CellManager : MonoBehaviour {
 	void OnMouseDown()
     {
         if (phaseScript.gState == PhaseManager.GameState.prepPhase) {
-				Debug.Log (phaseScript.numTraps);
-			if (status == "empty" && this.gameObject.GetComponent<SpriteRenderer> ().color != tmp) {
+			if (status == "empty" && this.gameObject.GetComponent<SpriteRenderer> ().color != tmp && phaseScript.numTraps > 0) {
 				status = "bear";
 				cellBear.active = true;
 				phaseScript.numTraps--;
-			} else if (status == "bear") {
+			} else if (status == "bear" && phaseScript.numTraps >= 0) {
 				status = "spike";
 				cellBear.active = false;
 				cellSpike.active = true;
