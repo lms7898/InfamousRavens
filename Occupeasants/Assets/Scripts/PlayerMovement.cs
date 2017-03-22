@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour {
     private float moveX;
     private float moveY;
     private float speed;
+    private float attackTimer;
 
     private Rigidbody2D playerBody;
     private SpriteRenderer sprite;
@@ -22,6 +23,7 @@ public class PlayerMovement : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        attackTimer = 0.0f;
         speed = 4.0f;
         numKills = 0;
         attacking = false;
@@ -34,6 +36,7 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        print(attackTimer);
         float posX = transform.position.x;
         float posY = transform.position.y;
 
@@ -48,13 +51,26 @@ public class PlayerMovement : MonoBehaviour {
         playerBody.MovePosition(playerPos + movement);
 
         Animate(moveX, moveY);
+        
+        if(attackTimer <= 0.0f) {
+            attacking = false;
+        } else {
+            attacking = true;
+        }
 
         // If game is in combat phase
         // If left mouse button is down and player is not already attacking
-        
-		if (Input.GetMouseButtonDown(0) && phaseScript.gState == PhaseManager.GameState.combatPhase && attacking == false) {
-               Attack();
+		if (phaseScript.gState == PhaseManager.GameState.combatPhase && attacking == false) {
+            if (Input.GetMouseButtonDown(0)) {
+                Attack();
+                attackTimer = 1.0f;
+            }
+        }
+
+        if (attacking == true) {
+            attackTimer -= Time.deltaTime;
         } else {
+            sprite.color = Color.white;
             attacking = false;
             combatAnim.SetBool("Attacking", false);
         }
