@@ -23,13 +23,13 @@ public class EnemyBase : MonoBehaviour
     int direction = 1;
     private float DefaultMS;
     private float Health = 100;
-    private bool hasTreasure;
     private float currentTime;
     private bool slowed = false;
     private float slowedSpeed;
     private float GlobalAttackCD = 3;
     public float Damage;
-    
+    public bool hasTreasure;
+
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
 

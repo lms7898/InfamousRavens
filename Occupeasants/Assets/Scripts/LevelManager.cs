@@ -15,4 +15,14 @@ public class LevelManager : MonoBehaviour {
         Debug.Log("Game stopped");
         Application.Quit();
     }
+
+    //Button that shows when player loses, restarts current level
+    public void TryAgain()
+    {
+        if(SceneManager.GetActiveScene().name == "scene1")
+        {
+            SceneManager.LoadScene(1);
+        }
+    }
+    
 }

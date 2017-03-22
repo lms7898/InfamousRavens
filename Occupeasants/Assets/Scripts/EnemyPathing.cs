@@ -10,6 +10,7 @@ public class EnemyPathing : MonoBehaviour {
     float Timer;
     static Vector3 CurrentPosition;
     int currentNode = 0;
+    public GameObject TryAgain;
 
 	// Use this for initialization
 	void Start () {
@@ -41,6 +42,13 @@ public class EnemyPathing : MonoBehaviour {
             {
                 currentNode = -1;
             }
+        }
+
+        //if enemy reaches door
+        if(PathNodes[currentNode] == PathNodes[PathNodes.Length] && Enemy.GetComponent<EnemyBase>().hasTreasure)
+        {
+            //show play again button
+
         }
 	}
 }
