@@ -63,14 +63,15 @@ public class PlayerMovement : MonoBehaviour {
 		if (phaseScript.gState == PhaseManager.GameState.combatPhase && attacking == false) {
             if (Input.GetMouseButtonDown(0)) {
                 Attack();
-                attackTimer = 1.0f;
+                attackTimer = 0.6f;
             }
         }
 
         if (attacking == true) {
             attackTimer -= Time.deltaTime;
+			sprite.color = Color.green;
         } else {
-            sprite.color = Color.white;
+			sprite.color = Color.white;
             attacking = false;
             combatAnim.SetBool("Attacking", false);
         }
