@@ -24,6 +24,7 @@ public class EnemyBase : MonoBehaviour
     int direction = 1;
     private float DefaultMS;
     private float Health = 100;
+    private float attackRange = 3f;
     private bool hasTreasure;
     private float currentTime;
     private bool slowed = false;
@@ -117,6 +118,10 @@ public class EnemyBase : MonoBehaviour
         if (other.GetComponent<PlayerMovement>())
         {
             StartCoroutine(Attack(0.5f, 1, Damage));
+            if(other.GetComponent<PlayerMovement>().Health > 0)
+            {
+                currentTarget = Player.transform.position;
+            }
         }
 
 
@@ -188,9 +193,15 @@ public class EnemyBase : MonoBehaviour
         int currentCount = 0;
         while(currentCount < Ticks)
         {
-            Player.GetComponent<PlayerMovement>().TakeDamage(DMG);
-            yield return new WaitForSeconds(Duration);
-            ++currentCount;
+            if (Vector3.Distance(transform.position, Player.transform.position) > attackRange)
+            {
+                Player.GetComponent<PlayerMovement>().TakeDamage(DMG);
+            }
+            else
+            {
+                yield return new WaitForSeconds(Duration);
+                ++currentCount;
+            }
         }
         currentTarget = PathPoints[pointIndex].transform.position;
         hitPlayer = true;
@@ -200,14 +211,14 @@ public class EnemyBase : MonoBehaviour
     IEnumerator Bleed(float Duration, int Ticks, float DMG)
     {
         int currentCount = 0;
-        GetComponentInChildren<Animator>().SetInteger("EffectType",1);
+        GetComponentInChildren<ParticleSystem>().Play();
         while (currentCount < Ticks)
         {
             TakeDamage(DMG);
             yield return new WaitForSeconds(Duration);
             ++currentCount;
         }
-        GetComponentInChildren<Animator>().SetInteger("EffectType", 0);
+        GetComponentInChildren<ParticleSystem>().Stop();
     }
 
     //Use this when applying damage so the health bar works correctly
