@@ -44,11 +44,11 @@ public class EnemyPathing : MonoBehaviour {
             }
         }
 
-        //if enemy reaches door
+        //if enemy reaches door and has treasure
         if(PathNodes[currentNode] == PathNodes[PathNodes.Length] && Enemy.GetComponent<EnemyBase>().hasTreasure)
         {
             //show play again button
-
+            TryAgain.gameObject.SetActive(true);
         }
 	}
 }
