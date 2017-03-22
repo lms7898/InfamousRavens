@@ -245,8 +245,7 @@ public class PlayerMovement : MonoBehaviour {
 
         foreach (Collider2D col in colls) {
 			if (other.gameObject.tag == "Enemy" && attacking == true && col.name == "CombatCollider") {
-                Destroy(other.gameObject);
-                numKills++;
+				other.GetComponent<EnemyBase> ().TakeDamage (10);
             }
         }
     }

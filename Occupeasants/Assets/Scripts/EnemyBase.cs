@@ -195,7 +195,7 @@ public class EnemyBase : MonoBehaviour
     }
 
     //Use this when applying damage so the health bar works correctly
-    private void TakeDamage(float DmgVal)
+    public void TakeDamage(float DmgVal)
     {
         //Divide for the localScale to work properly
         Health = (Health - DmgVal) / 100;
@@ -215,6 +215,7 @@ public class EnemyBase : MonoBehaviour
         if(Health <= 0)
         {
             Destroy(gameObject);
+			Player.GetComponent<PlayerMovement> ().numKills++;
         }
     }
 
