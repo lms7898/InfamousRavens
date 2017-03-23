@@ -12,6 +12,9 @@ public class EnemyBase : MonoBehaviour
     
     public GameObject HealthBar;
     public GameObject Status;
+    public GameObject Weapon;
+    public GameObject bleed;
+    public GameObject slow;
 
     public Sprite Attacking, Hunting;
 
@@ -69,7 +72,7 @@ public class EnemyBase : MonoBehaviour
             {
                 MoveSpeed = DefaultMS;
                 slowed = false;
-                GetComponent<SpriteRenderer>().color = Color.white;
+                slow.GetComponent<ParticleSystem>().Stop();
                 Debug.Log("not trapped");
                 Debug.Log(Time.fixedTime);
             }
@@ -112,16 +115,13 @@ public class EnemyBase : MonoBehaviour
             Point = PathPoints[pointIndex];
             currentTarget = Point.transform.position;
         }
-        
+
 
         //Hit the player
         if (other.GetComponent<PlayerMovement>())
         {
-            StartCoroutine(Attack(0.5f, 1, Damage));
-            if(other.GetComponent<PlayerMovement>().Health > 0)
-            {
-                currentTarget = Player.transform.position;
-            }
+            Weapon.GetComponent<Animator>().SetBool("Attacking", true);
+            Debug.Log("attacking");
         }
 
 
@@ -132,7 +132,7 @@ public class EnemyBase : MonoBehaviour
             STimer = Time.fixedTime + other.GetComponent<TrapBase>().Duration;
             slowed = true;
             slowedSpeed = MoveSpeed / 2;
-            GetComponent<SpriteRenderer>().color = Color.blue;
+            slow.GetComponent<ParticleSystem>().Play();
             Debug.Log("trapped");
             Debug.Log(Time.fixedTime);
         }
@@ -141,6 +141,15 @@ public class EnemyBase : MonoBehaviour
         if(other.GetComponent<SpikeTrap>())
         {
             StartCoroutine(Bleed(1, 3, 10));
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.GetComponent<PlayerMovement>())
+        {
+            Weapon.GetComponent<Animator>().SetBool("Attacking", false);
+            Debug.Log("not attacking");
         }
     }
 
@@ -158,14 +167,12 @@ public class EnemyBase : MonoBehaviour
         //Did the player come close enough?
         if (distToPlayer <= 5)
         {
-            if (!hitPlayer)
-            {
-                //Go get em!
-                currentTarget = Player.transform.position;
-                Status.GetComponent<SpriteRenderer>().sprite = Attacking;
-                Status.GetComponent<SpriteRenderer>().color = Color.red;
-                Debug.DrawLine(Player.transform.position, transform.position, Color.red);
-            }
+            //Go get em!
+            currentTarget = Player.transform.position;
+            Status.GetComponent<SpriteRenderer>().sprite = Attacking;
+            Status.GetComponent<SpriteRenderer>().color = Color.red;
+            Debug.DrawLine(Player.transform.position, transform.position, Color.red);
+
         }
 
         //Player too far now
@@ -182,43 +189,22 @@ public class EnemyBase : MonoBehaviour
             }
 
             currentTarget = PathPoints[pointIndex].transform.position;
-            hitPlayer = true;
         }
 
-    }
-
-    //Attack
-    IEnumerator Attack(float Duration, int Ticks, float DMG)
-    {
-        int currentCount = 0;
-        while(currentCount < Ticks)
-        {
-            if (Vector3.Distance(transform.position, Player.transform.position) > attackRange)
-            {
-                Player.GetComponent<PlayerMovement>().TakeDamage(DMG);
-            }
-            else
-            {
-                yield return new WaitForSeconds(Duration);
-                ++currentCount;
-            }
-        }
-        currentTarget = PathPoints[pointIndex].transform.position;
-        hitPlayer = true;
     }
 
     //Bleeding Damage over Time effect
     IEnumerator Bleed(float Duration, int Ticks, float DMG)
     {
         int currentCount = 0;
-        GetComponentInChildren<ParticleSystem>().Play();
+        bleed.GetComponent<ParticleSystem>().Play();
         while (currentCount < Ticks)
         {
             TakeDamage(DMG);
             yield return new WaitForSeconds(Duration);
             ++currentCount;
         }
-        GetComponentInChildren<ParticleSystem>().Stop();
+        bleed.GetComponent<ParticleSystem>().Stop();
     }
 
     //Use this when applying damage so the health bar works correctly

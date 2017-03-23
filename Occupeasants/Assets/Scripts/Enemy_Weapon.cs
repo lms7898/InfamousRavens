@@ -22,7 +22,7 @@ public class Enemy_Weapon : MonoBehaviour {
 
     void Hit()
     {
-        if (Vector3.Distance(player.transform.position, parent.transform.position) < 3f)
+        if (Vector3.Distance(player.transform.position, parent.transform.position) <= 2.0f)
         {
             player.GetComponent<PlayerMovement>().TakeDamage(damage);
             Debug.Log("Hit player");
