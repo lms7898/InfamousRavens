@@ -9,12 +9,15 @@ public class EnemyBase : MonoBehaviour
     public float Damage;
     public GameObject Path;
     public GameObject Player;
-    
     public GameObject HealthBar;
     public GameObject Status;
+<<<<<<< HEAD
     public GameObject Weapon;
     public GameObject bleed;
     public GameObject slow;
+=======
+    public GameObject phaseManager;
+>>>>>>> refs/remotes/origin/PhaseManager
 
     public Sprite Attacking, Hunting;
 
@@ -43,6 +46,7 @@ public class EnemyBase : MonoBehaviour
         //load the path and set the targets
         Path = GameObject.Find("Path");
         Player = GameObject.Find("Player");
+        phaseManager = GameObject.Find("PhaseManager");
         PathPoints = Path.GetComponentsInChildren<Node>();
         Point = PathPoints[pointIndex];
         currentTarget = Point.transform.position;
@@ -208,7 +212,7 @@ public class EnemyBase : MonoBehaviour
     }
 
     //Use this when applying damage so the health bar works correctly
-    private void TakeDamage(float DmgVal)
+    public void TakeDamage(float DmgVal)
     {
         //Divide for the localScale to work properly
         Health = (Health - DmgVal) / 100;
@@ -228,6 +232,8 @@ public class EnemyBase : MonoBehaviour
         if(Health <= 0)
         {
             Destroy(gameObject);
+			Player.GetComponent<PlayerMovement> ().numKills++;
+            phaseManager.GetComponent<PhaseManager>().maxKills--;
         }
     }
 

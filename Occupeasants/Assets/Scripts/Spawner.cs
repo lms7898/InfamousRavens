@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour {
-
     public GameObject Enemy;
     public int SpawnTotal;
     private bool active;

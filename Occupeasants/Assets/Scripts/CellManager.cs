@@ -13,7 +13,7 @@ public class CellManager : MonoBehaviour {
     private GameObject phaseManager;
     private PhaseManager phaseScript;
 
-    string status;
+    public string status;
     Color tmp;
 
     // Sets the initial values of things
@@ -43,23 +43,19 @@ public class CellManager : MonoBehaviour {
 	void OnMouseDown()
     {
         if (phaseScript.gState == PhaseManager.GameState.prepPhase) {
-            Debug.Log(status);
-            if (status == "empty" && this.gameObject.GetComponent<SpriteRenderer>().color != tmp)
-            {
-                status = "bear";
-                cellBear.active = true;
-            }
-            else if (status == "bear")
-            {
-                status = "spike";
-                cellBear.active = false;
-                cellSpike.active = true;
-            }
-            else if (status == "spike")
-            {
-                status = "empty";
-                cellSpike.active = false;
-            }
+			if (status == "empty" && this.gameObject.GetComponent<SpriteRenderer> ().color != tmp && phaseScript.numTraps > 0) {
+				status = "bear";
+				cellBear.active = true;
+				phaseScript.numTraps--;
+			} else if (status == "bear" && phaseScript.numTraps >= 0) {
+				status = "spike";
+				cellBear.active = false;
+				cellSpike.active = true;
+			} else if (status == "spike") {
+				status = "empty";
+				cellSpike.active = false;
+				phaseScript.numTraps++;
+			}
         }
     }
 }
