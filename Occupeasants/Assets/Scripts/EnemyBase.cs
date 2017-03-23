@@ -11,13 +11,10 @@ public class EnemyBase : MonoBehaviour
     public GameObject Player;
     public GameObject HealthBar;
     public GameObject Status;
-<<<<<<< HEAD
     public GameObject Weapon;
     public GameObject bleed;
     public GameObject slow;
-=======
     public GameObject phaseManager;
->>>>>>> refs/remotes/origin/PhaseManager
 
     public Sprite Attacking, Hunting;
 

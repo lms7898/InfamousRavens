@@ -34,11 +34,9 @@ public class PhaseManager : MonoBehaviour {
 
         // initialize gamestate
         gState = GameState.prepPhase;
-
-<<<<<<< HEAD
+        
         // deactivate spawner
         spawner = GameObject.Find("Spawner");
-=======
         // set number of traps
 		numTraps = 6;
 
@@ -47,7 +45,6 @@ public class PhaseManager : MonoBehaviour {
 
         // set max kills
         maxKills = 3;
->>>>>>> refs/remotes/origin/PhaseManager
     }
 	
 	// Update is called once per frame
@@ -85,8 +82,6 @@ public class PhaseManager : MonoBehaviour {
             gState = GameState.combatPhase;
 
             // activate spawner
-<<<<<<< HEAD
-=======
 			spawner = Instantiate(spawner);
 
 			GameObject[] floorTiles = GameObject.FindGameObjectsWithTag("Floor");
@@ -100,7 +95,6 @@ public class PhaseManager : MonoBehaviour {
 
         if (maxKills <= 0) {
             SceneManager.LoadSceneAsync("StartScreen");
->>>>>>> refs/remotes/origin/PhaseManager
         }
 	}
 }
