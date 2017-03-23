@@ -1,10 +1,17 @@
 fileFormatVersion: 2
 guid: c2665bdd1870ab944905621743760178
-timeCreated: 1486411381
-licenseType: Pro
+timeCreated: 1490295650
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Path: {instanceID: 0}
+  - Player: {instanceID: 0}
+  - HealthBar: {instanceID: 0}
+  - Status: {instanceID: 0}
+  - spawner: {fileID: 1061393131720796, guid: dab8ed2573d83bb46b801e33c638da6d, type: 2}
+  - Attacking: {instanceID: 0}
+  - Hunting: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -36,7 +36,6 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        print(attackTimer);
         float posX = transform.position.x;
         float posY = transform.position.y;
 

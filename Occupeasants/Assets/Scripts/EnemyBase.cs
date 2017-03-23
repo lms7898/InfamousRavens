@@ -8,9 +8,9 @@ public class EnemyBase : MonoBehaviour
     public float MoveSpeed;
     public GameObject Path;
     public GameObject Player;
-    
     public GameObject HealthBar;
     public GameObject Status;
+    public GameObject phaseManager;
 
     public Sprite Attacking, Hunting;
 
@@ -40,6 +40,7 @@ public class EnemyBase : MonoBehaviour
         //load the path and set the targets
         Path = GameObject.Find("Path");
         Player = GameObject.Find("Player");
+        phaseManager = GameObject.Find("PhaseManager");
         PathPoints = Path.GetComponentsInChildren<Node>();
         Point = PathPoints[pointIndex];
         currentTarget = Point.transform.position;
@@ -216,6 +217,7 @@ public class EnemyBase : MonoBehaviour
         {
             Destroy(gameObject);
 			Player.GetComponent<PlayerMovement> ().numKills++;
+            phaseManager.GetComponent<PhaseManager>().maxKills--;
         }
     }
 
