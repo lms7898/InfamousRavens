@@ -5,6 +5,8 @@ using UnityEngine;
 public class Spawner : MonoBehaviour {
 
     public GameObject Enemy;
+    public List<GameObject> Enemies = new List<GameObject>();
+    public int _numEnemies;
 
 	// Use this for initialization
 	void Start () {
@@ -19,9 +21,13 @@ public class Spawner : MonoBehaviour {
     IEnumerator Spawn(GameObject enemy, float interval, int numEnemies)
     {
         int currentCount = 0;
+        _numEnemies = numEnemies;
+        GameObject tempEnemy;
         while (currentCount < numEnemies)
         {
-            Instantiate(enemy, transform.position, Quaternion.identity);
+            tempEnemy = Instantiate(enemy, transform.position, Quaternion.identity);
+            Enemies.Add(tempEnemy);
+            tempEnemy.GetComponent<EnemyBase>().index = currentCount;
             yield return new WaitForSeconds(2);
             ++currentCount;
         }

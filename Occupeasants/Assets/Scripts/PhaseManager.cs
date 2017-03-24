@@ -11,6 +11,7 @@ public class PhaseManager : MonoBehaviour {
 
 	public int numTraps;
     public GameObject spawner;
+    public GameObject restartButton;
 
     public enum GameState{
         prepPhase,
@@ -30,10 +31,13 @@ public class PhaseManager : MonoBehaviour {
 		numTraps = 6;
 
         // set prep timer
-        prepTimer = 0.0f;
+        prepTimer = 0.8f;
 
         // set max kills
         maxKills = 3;
+
+        // set time scale
+        Time.timeScale = 1;
     }
 	
 	// Update is called once per frame
@@ -61,5 +65,19 @@ public class PhaseManager : MonoBehaviour {
         if (playerScript.numKills == maxKills) {
             SceneManager.LoadSceneAsync("StartScreen");
         }
-	}
+
+        if(Time.timeScale == 1) {
+            foreach (GameObject enemy in spawner.GetComponent<Spawner>().Enemies)
+            {
+                if (enemy != null && enemy.tag == "Enemy")
+                {
+                    if (enemy.GetComponent<EnemyBase>().hasTreasure == true && enemy.GetComponent<EnemyBase>().Point == enemy.GetComponent<EnemyBase>().PathPoints[0])
+                    {
+                        Instantiate(restartButton);
+                        Time.timeScale = 0;
+                    }
+                }
+            }
+        }
+    }
 }

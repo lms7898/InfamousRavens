@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour {
 	
 	public void StartGame()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadSceneAsync("scene1");
     }
 
     public void QuiteGame()
@@ -19,10 +19,7 @@ public class LevelManager : MonoBehaviour {
     //Button that shows when player loses, restarts current level
     public void TryAgain()
     {
-        if(SceneManager.GetActiveScene().name == "scene1")
-        {
-            SceneManager.LoadScene(1);
-        }
+        SceneManager.LoadSceneAsync("scene1");
     }
     
 }
