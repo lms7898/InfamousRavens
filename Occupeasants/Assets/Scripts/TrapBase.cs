@@ -21,7 +21,6 @@ public class TrapBase : MonoBehaviour {
         if(other.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("touching a trap");
-            GetComponent<Animator>().SetBool("Active", true);
         }
     }
 

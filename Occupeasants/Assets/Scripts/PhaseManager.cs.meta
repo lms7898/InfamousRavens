@@ -1,10 +1,18 @@
 fileFormatVersion: 2
 guid: d399cf485f7a23d4a9fa37ca08f6498c
-timeCreated: 1489081269
-licenseType: Pro
+timeCreated: 1490321861
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - spawner: {fileID: 1061393131720796, guid: dab8ed2573d83bb46b801e33c638da6d, type: 2}
+  - phaseText: {instanceID: 0}
+  - timerLabel: {instanceID: 0}
+  - numKillsLabel: {instanceID: 0}
+  - timerText: {instanceID: 0}
+  - numKillsText: {instanceID: 0}
+  - eRemainingLabel: {instanceID: 0}
+  - eRemainingText: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

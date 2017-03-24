@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PhaseManager : MonoBehaviour {
 
-    private float prepTimer;
+    public float prepTimer;
     private PlayerMovement playerScript;
 
 	public int numTraps;
@@ -34,9 +34,7 @@ public class PhaseManager : MonoBehaviour {
 
         // initialize gamestate
         gState = GameState.prepPhase;
-        
-        // deactivate spawner
-        spawner = GameObject.Find("Spawner");
+
         // set number of traps
 		numTraps = 6;
 
