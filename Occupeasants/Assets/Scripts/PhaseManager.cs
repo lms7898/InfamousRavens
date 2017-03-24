@@ -92,7 +92,7 @@ public class PhaseManager : MonoBehaviour {
 		}
 
         if (maxKills <= 0) {
-            SceneManager.LoadSceneAsync("StartScreen");
+            SceneManager.LoadSceneAsync("Game Over");
         }
 	}
 }
