@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour {
-    public GameObject Enemy;
-    public int SpawnTotal;
-    private bool active;
+public class Spawner : MonoBehaviour
+{
 
+    public GameObject Enemy;
+    public List<GameObject> Enemies = new List<GameObject>();
+    public int _numEnemies;
 
     // Use this for initialization
     void Start()
     {
-        Invoke("Activate", GameObject.Find("PhaseManager").GetComponent<PhaseManager>().prepTimer);
+        StartCoroutine(Spawn(Enemy, 2, 3));
     }
 
     // Update is called once per frame
@@ -20,22 +21,19 @@ public class Spawner : MonoBehaviour {
 
     }
 
-    private void Activate()
-    {
-        StartCoroutine(Spawn(Enemy, 2, SpawnTotal));
-    }
-
-    
     IEnumerator Spawn(GameObject enemy, float interval, int numEnemies)
     {
         int currentCount = 0;
+        _numEnemies = numEnemies;
+        GameObject tempEnemy;
         while (currentCount < numEnemies)
         {
-            Instantiate(enemy, transform.position, Quaternion.identity);
+            tempEnemy = Instantiate(enemy, transform.position, Quaternion.identity);
+            Enemies.Add(tempEnemy);
+            tempEnemy.GetComponent<EnemyBase>().index = currentCount;
             yield return new WaitForSeconds(2);
             ++currentCount;
         }
-        active = false;
     }
 
 }

@@ -9,6 +9,8 @@ public class EnemyBase : MonoBehaviour
     public float Damage;
     public GameObject Path;
     public GameObject Player;
+    public GameObject spawner;
+
     public GameObject HealthBar;
     public GameObject Status;
     public GameObject Weapon;
@@ -19,8 +21,10 @@ public class EnemyBase : MonoBehaviour
     public Sprite Attacking, Hunting;
 
     private Vector3 currentTarget;
-    Node[] PathPoints;
-    private Node Point;
+    public Node[] PathPoints;
+    public Node Point;
+
+    public int index;
 
     private float STimer;
     int pointIndex = 0;
@@ -231,6 +235,8 @@ public class EnemyBase : MonoBehaviour
             Destroy(gameObject);
 			Player.GetComponent<PlayerMovement> ().numKills++;
             phaseManager.GetComponent<PhaseManager>().maxKills--;
+            spawner.GetComponent<Spawner>().Enemies.RemoveAt(index);
+            spawner.GetComponent<Spawner>().Enemies[index] = null;
         }
     }
 
@@ -291,7 +297,4 @@ public class EnemyBase : MonoBehaviour
             GetComponent<Animator>().SetInteger("Direction", 5);
         }
     }
-
-
-
 }
