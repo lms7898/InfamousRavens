@@ -16,13 +16,18 @@ public class LevelManager : MonoBehaviour {
         Application.Quit();
     }
 
+    public void StartScene()
+    {
+        SceneManager.LoadScene(2);
+    }
+
     //Button that shows when player loses, restarts current level
     public void TryAgain()
     {
         if(SceneManager.GetActiveScene().name == "scene1")
         {
             SceneManager.LoadScene(1);
-        }
+        } 
     }
     
 }
