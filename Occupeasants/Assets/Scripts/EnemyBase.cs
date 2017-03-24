@@ -28,11 +28,11 @@ public class EnemyBase : MonoBehaviour
     private float DefaultMS;
     private float Health = 100;
     private float attackRange = 3f;
-    private bool hasTreasure;
+    public bool hasTreasure;
     private float currentTime;
     private bool slowed = false;
     private float slowedSpeed;
-    
+
     //debug stuff
     bool hitPlayer = false; //this is so the player isn't chased constantly, the enemy hits you once and goes back to the path
 
@@ -291,5 +291,7 @@ public class EnemyBase : MonoBehaviour
             GetComponent<Animator>().SetInteger("Direction", 5);
         }
     }
+
+
 
 }
