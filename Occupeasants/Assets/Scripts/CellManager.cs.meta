@@ -1,10 +1,13 @@
 fileFormatVersion: 2
 guid: b23ae05019597ce4f9c7c836fdadb63d
-timeCreated: 1487364870
-licenseType: Pro
+timeCreated: 1490321205
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - bearTrap: {fileID: 1445964863276034, guid: a6d0f60a2c68c3f4a92eb7eaab10127f, type: 2}
+  - spikeTrap: {fileID: 1665000857784578, guid: 5bf399c0a02dcaf409c769704113a604,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

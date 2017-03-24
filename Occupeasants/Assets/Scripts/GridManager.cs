@@ -57,9 +57,11 @@ public class GridManager : MonoBehaviour {
         {
             for (int j = 0; j < textFile[i].Length; j++)
             {
+                // Creates the trap grid to go on top of the level
 				Instantiate(floor_tile);
 				floor_tile.transform.position = new Vector3(startX + j * 1.68f, startY + i * 1.68f, 0);
 
+                // Checks what char is at that position and assigns the correct tile as well as if its an active trap placing area
 				switch(textFile[i][j]) {
 				case ("C"):
 						Instantiate (ceiling_tile);
@@ -71,6 +73,7 @@ public class GridManager : MonoBehaviour {
 						floor_tile.GetComponent<SpriteRenderer>().color = tmp;
 
 						break;
+
 					case ("F"):
 						Instantiate(wood_floor_tile);
 						wood_floor_tile.transform.position = new Vector3(startX + j * 1.68f, startY + i * 1.68f, 2);
@@ -81,6 +84,7 @@ public class GridManager : MonoBehaviour {
 						floor_tile.GetComponent<SpriteRenderer>().color = tmp;
 
 						break;
+
 					case ("R"):
 						Instantiate(rug_tile);
 						rug_tile.transform.position = new Vector3(startX + j * 1.68f, startY + i * 1.68f, 2);
@@ -91,6 +95,7 @@ public class GridManager : MonoBehaviour {
 						floor_tile.GetComponent<SpriteRenderer>().color = tmp;
 
 						break;
+
 					case ("W"):
 						Instantiate(wall_tile);
 						wall_tile.transform.position = new Vector3(startX + j * 1.68f, startY + i * 1.68f, 2);
@@ -99,7 +104,9 @@ public class GridManager : MonoBehaviour {
 						tmp = floor_tile.GetComponent<SpriteRenderer>().color;
 						tmp.a = 0.0f;
 						floor_tile.GetComponent<SpriteRenderer>().color = tmp;
+
 						break;
+
 					case ("D"):
 						Instantiate(door_tile);
 						door_tile.transform.position = new Vector3(startX + j * 1.68f, startY + i * 1.68f, 2);
@@ -108,15 +115,24 @@ public class GridManager : MonoBehaviour {
 						tmp = floor_tile.GetComponent<SpriteRenderer>().color;
 						tmp.a = 0.0f;
 						floor_tile.GetComponent<SpriteRenderer>().color = tmp;
+ 
 						break;
+
 					case ("N"):
 						floor_tile.GetComponent<SpriteRenderer>().color = Color.black;
 						tmp = floor_tile.GetComponent<SpriteRenderer>().color;
 						tmp.a = 0.0f;
 						floor_tile.GetComponent<SpriteRenderer>().color = tmp;
+
 						break;
+
 					default:
-						break;
+                        floor_tile.GetComponent<SpriteRenderer>().color = Color.black;
+                        tmp = floor_tile.GetComponent<SpriteRenderer>().color;
+                        tmp.a = 0.0f;
+                        floor_tile.GetComponent<SpriteRenderer>().color = tmp;
+
+                        break;
 				}
             }
         }

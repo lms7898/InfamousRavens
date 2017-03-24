@@ -6,7 +6,7 @@ N C F R F F F F F F F F F R F C N N N
 N C F R F W W W W W W W F R F C N N N
 N C F R F C C C C C C C F R F C N N N
 N C F R F C N N N N N C F R F C N N N
-N C F R F C W N W W W C F R F C W W W
+W C F R F C W N W W W C F R F C W W W
 C C F R F C C N C C C C F R F C C C C
 C F F R F F C N C F F F F R F F F F C
 C F F R F F C N C F F F F R F F F F C
